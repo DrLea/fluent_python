@@ -1,0 +1,18 @@
+from array import array
+from random import random
+from datetime import datetime
+
+
+start_time = datetime.now()
+floats = array('d', (random() for _ in range(10**3)))
+print(floats[-1])
+print(floats.__sizeof__())
+print('array:', datetime.now() - start_time)
+file = open('floats', 'wb')
+floats.tofile(file)
+file.close()
+file = open('floats', 'rb')
+floats2 = array('d')
+floats2.fromfile(file, 10**3)
+file.close()
+print(floats2[-1])
