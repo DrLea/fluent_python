@@ -1,0 +1,11 @@
+from array import array
+
+lis = array('B', [1,2,3,4,5,6])
+mem = memoryview(lis)
+print(mem.tolist())
+
+mem2 = mem.cast('B', [2,3])
+print(mem2.tolist())
+
+mem2[1,0] = 0
+print(mem.tolist())
