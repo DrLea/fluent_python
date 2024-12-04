@@ -1,0 +1,38 @@
+def interpret_sentence(sentence):
+    match sentence.split():
+        case ["Hello", name]:
+            return f"Hi {name}!"
+        case [*any, "Buy", "milk"]:
+            return "Don't forget the milk!"
+        case ['half_life', num]:
+            return f"Half-life of {num}"
+        case [*any, [*lis]]:
+            return f"List inside list detected: Outer: {any}, Inner: {lis}"
+        case [float(a)]:
+            return f"Single float value detected: {a}"
+        case [(a, b) as nums]:
+            return f"Tuple detected: {nums}"
+        case ['1' | '2']:
+            print("1 or 2")
+        case [_, name] if name == "Eli":
+            return "Special case for Eli!"
+        case [_, _]:
+            return "Any 2 words"
+        case _:
+            return "I don't understand."
+
+# Test cases
+# Some of them work if direct template is sent, not sliced list
+print(interpret_sentence("Hello Alice"))            # Hi Alice!
+print(interpret_sentence("Alice Buy milk"))         # Don't forget the milk!
+print(interpret_sentence("Gordon Freeman Buy milk")) # Don't forget the milk!
+print(interpret_sentence("Gman Buy SOME milk"))      # I don't understand.
+print(interpret_sentence("half_life 41.51"))         # Half-life of 41.51
+print(interpret_sentence("SOME milk"))              # Any 2 words
+print(interpret_sentence("Random text here"))       # I don't understand.
+print(interpret_sentence("40"))                     # Single float value detected: 40.0
+print(interpret_sentence("12.34"))                  # Single float value detected: 12.34
+print(interpret_sentence("(1,2)"))                  # Tuple detected: ('1', '2')
+print(interpret_sentence("2"))                      # one or two
+print(interpret_sentence("Outer [1, 2, 3]"))        # List inside list detected: Outer: ['Outer'], Inner: ['1,', '2,', '3']
+print(interpret_sentence("HALO Eli"))              # Special case for Eli!
