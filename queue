@@ -1,0 +1,9 @@
+from queue import Queue
+
+q = Queue(maxsize=3)  # Create a bounded queue
+q.put(1)  # Add an element
+q.put(2)
+q.put(3)
+q.put(4)  # This will block until space is freed
+print(q.get())  # Remove and return the first item: 1
+print(q.get())  # Remove and return the next item: 2
