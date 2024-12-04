@@ -1,0 +1,8 @@
+import heapq
+
+heap = []
+heapq.heappush(heap, 10)  # Add 10 to the heap
+heapq.heappush(heap, 1)   # Add 1 to the heap
+heapq.heappush(heap, 5)   # Add 5 to the heap
+print(heapq.heappop(heap))  # Remove and return the smallest item: 1
+print(heapq.heappop(heap))  # Next smallest: 5
