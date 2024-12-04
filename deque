@@ -1,0 +1,25 @@
+from collections import deque
+
+# Create a deque with a maxlen of 10 (fixed size)
+dq = deque(range(10), maxlen=10)  # deque([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+print(dq)  # Initial deque
+
+# Rotate the deque to the right by 3 steps
+dq.rotate(3)  # deque([7, 8, 9, 0, 1, 2, 3, 4, 5, 6], maxlen=10)
+print(dq)  # After rotating to the right by 3 steps
+
+# Rotate the deque to the left by 4 steps
+dq.rotate(-4)  # deque([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], maxlen=10)
+print(dq)  # After rotating to the left by 4 steps
+
+# Add a new element to the left of the deque (pushing out the last element if maxlen is reached)
+dq.appendleft(-1)  # deque([-1, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+print(dq)  # After appending -1 to the left
+
+# Extend the deque with new elements at the right (pushing out old elements if maxlen is reached)
+dq.extend([11, 22, 33])  # deque([3, 4, 5, 6, 7, 8, 9, 11, 22, 33], maxlen=10)
+print(dq)  # After extending with [11, 22, 33] on the right
+
+# Extend the deque with new elements at the left (note: elements are added in reverse order)
+dq.extendleft([10, 20, 30, 40])  # deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
+print(dq)  # After extending with [10, 20, 30, 40] on the left
