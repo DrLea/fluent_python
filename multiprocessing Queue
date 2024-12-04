@@ -1,0 +1,11 @@
+from multiprocessing import Queue, Process
+
+def worker(q):
+    q.put("Task Complete!")
+
+q = Queue(maxsize=2)  # Bounded multiprocessing queue
+p = Process(target=worker, args=(q,))
+if __name__ == "__main__":
+    p.start()
+    print(q.get())  # Get the result from the worker: Task Complete!
+    p.join()
