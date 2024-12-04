@@ -1,0 +1,26 @@
+import asyncio
+
+async def producer(queue):
+    for i in range(15):
+        await queue.put(i)
+        await asyncio.sleep(0.1)  # Simulating producer delay
+        print(f"Produced: {i}")
+
+async def consumer(queue):
+    while not queue.empty():
+        item = await queue.get()
+        print(f"Consumed: {item}")
+        await asyncio.sleep(0.5)  # Simulating producer delay
+        queue.task_done()
+
+async def main():
+    queue = asyncio.Queue(maxsize=10)  # Bounded asyncio queue
+    # Schedule producer and consumer to run concurrently
+    producer_task = asyncio.create_task(producer(queue))
+    consumer_task = asyncio.create_task(consumer(queue))
+
+    await producer_task  # Wait for the producer to finish
+    await queue.join()   # Ensure all tasks are done
+    consumer_task.cancel()  # Cancel the consumer since it's infinite
+
+asyncio.run(main())
