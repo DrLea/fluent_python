@@ -1,0 +1,17 @@
+# Пример использования MappingProxyType
+from types import MappingProxyType
+
+# MappingProxyType создаёт неизменяемый (read-only) "вид" на существующий словарь.
+# Это полезно, когда нужно предоставить доступ к данным без возможности их менять.
+
+original_dict = {'a': 1, 'b': 2}
+read_only = MappingProxyType(original_dict)
+
+print(read_only['a'])  # 1
+
+# Попытка изменения через read_only приведёт к ошибке:
+# read_only['a'] = 10  # TypeError: 'mappingproxy' object does not support item assignment
+
+# Однако, изменение original_dict отразится на read_only
+original_dict['a'] = 100
+print(read_only['a'])  # 100, поскольку mappingproxy "смотрит" на original_dict
