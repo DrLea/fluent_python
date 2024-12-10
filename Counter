@@ -1,0 +1,21 @@
+# Пример использования Counter
+from collections import Counter
+
+# Counter удобен для подсчёта вхождений элементов в итерациях:
+# он вернёт словарь, где ключ — элемент, а значение — его количество.
+
+data = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple']
+c = Counter(data)
+
+print(c)  # Counter({'apple': 3, 'banana': 2, 'orange': 1})
+
+# Можно быстро получить самые часто встречающиеся элементы
+print(c.most_common(2))  # [('apple', 3), ('banana', 2)]
+
+# Counter также удобно обновлять из других итераций
+c.update(['banana', 'apple'])
+print(c)  # Counter({'apple': 4, 'banana': 3, 'orange': 1})
+
+# Также можно проводить операции, как с мультимножествами:
+c2 = Counter(['apple', 'apple', 'grape'])
+print(c + c2)  # Объединение счетчиков: Counter({'apple': 6, 'banana': 3, 'orange': 1, 'grape': 1})
