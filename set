@@ -1,0 +1,18 @@
+# Пример использования set
+# Множество в Python обеспечивает хранение уникальных элементов,
+# а также быстрые операции проверки вхождения и множество операций:
+# объединение, пересечение, разность.
+
+my_set = {1, 2, 3}
+my_set.add(4)  # Добавляем элемент
+print(my_set)  # {1, 2, 3, 4}
+
+my_set.discard(2)  # Удаляем элемент, если он есть, без ошибки
+print(my_set)  # {1, 3, 4}
+
+another_set = {3, 4, 5, 6}
+intersection = my_set.intersection(another_set)
+print(intersection)  # {3, 4}
+
+union_set = my_set.union(another_set)
+print(union_set)  # {1, 3, 4, 5, 6}
