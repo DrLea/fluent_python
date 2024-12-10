@@ -1,0 +1,15 @@
+# Пример использования UserDict
+from collections import UserDict
+
+# UserDict позволяет создавать свои подклассы словаря, где мы можем переопределять логику
+# чтения, записи и других операций. Это удобно, когда нужно добавить в словарь особое поведение.
+
+class UpperCaseKeyDict(UserDict):
+    def __setitem__(self, key, value):
+        # Преобразуем ключи в верхний регистр
+        super().__setitem__(key.upper(), value)
+
+upper_dict = UpperCaseKeyDict()
+upper_dict['apple'] = 1
+upper_dict['Banana'] = 2
+print(upper_dict)  # {'APPLE': 1, 'BANANA': 2}
