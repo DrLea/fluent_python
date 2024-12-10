@@ -1,0 +1,18 @@
+# Пример использования defaultdict
+from collections import defaultdict
+
+# defaultdict упрощает работу со словарём, где значения по умолчанию не определены.
+# При обращении к несуществующему ключу автоматически создается значение по умолчанию.
+# Очень удобно для подсчётов или группировок, где неизвестно заранее, какие ключи будут.
+
+# Здесь мы используем defaultdict(list), чтобы удобно собирать данные по ключу
+groups = defaultdict(list)
+items = [('fruit', 'apple'), ('fruit', 'orange'), ('vegetable', 'carrot'), ('fruit', 'banana')]
+
+for category, name in items:
+    groups[category].append(name)
+
+# Теперь группы автоматически сформировались даже для тех категорий,
+# которые не были заранее объявлены.
+print(groups)  
+# defaultdict(<class 'list'>, {'fruit': ['apple', 'orange', 'banana'], 'vegetable': ['carrot']})
