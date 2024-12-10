@@ -1,0 +1,41 @@
+# Пример использования MutableSet (например, из модуля collections.abc)
+from collections.abc import MutableSet
+
+# MutableSet это абстрактный класс. Чтобы его использовать, нужно реализовать методы.
+# Ниже - пример простой реализации множества на основе списков:
+# Обычно нет необходимости в ручном использовании MutableSet,
+# но это демонстрация того, как можно создать собственную реализацию множества с кастомной логикой.
+
+class ListBasedSet(MutableSet):
+    def __init__(self, iterable=None):
+        self._items = []
+        if iterable:
+            for i in iterable:
+                self.add(i)
+    
+    def __contains__(self, item):
+        return item in self._items
+    
+    def __iter__(self):
+        return iter(self._items)
+    
+    def __len__(self):
+        return len(self._items)
+    
+    def add(self, item):
+        if item not in self._items:
+            self._items.append(item)
+    
+    def discard(self, item):
+        if item in self._items:
+            self._items.remove(item)
+
+custom_set = ListBasedSet([1, 2, 3])
+custom_set.add(3)
+custom_set.add(4)
+print(custom_set._items)  # [1, 2, 3, 4]
+
+custom_set.discard(2)
+print(custom_set._items)  # [1, 3, 4]
+
+print(3 in custom_set)  # True
