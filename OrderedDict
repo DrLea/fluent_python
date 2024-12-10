@@ -1,0 +1,21 @@
+# Пример использования OrderedDict
+from collections import OrderedDict
+
+# OrderedDict до Python 3.7 был необходим для сохранения порядка вставки элементов в словарь.
+# Начиная с Python 3.7, обычный словарь тоже запоминает порядок вставки,
+# но OrderedDict всё ещё полезен благодаря дополнительным методам, таким как move_to_end.
+
+ordered = OrderedDict()
+ordered['apple'] = 1
+ordered['banana'] = 2
+ordered['orange'] = 3
+
+# Допустим, мы хотим переместить 'banana' в конец
+ordered.move_to_end('banana')
+print(ordered)  
+# OrderedDict([('apple', 1), ('orange', 3), ('banana', 2)])
+
+# Также можно быстро извлечь и удалить элементы в порядке их вставки
+first_key, first_value = ordered.popitem(last=False)
+print(first_key, first_value)  # apple 1
+print(ordered)  # OrderedDict([('orange', 3), ('banana', 2)])
