@@ -1,0 +1,4 @@
+# remove comment and everything will work
+# coding: ASCII
+
+print('Olá, Mundo!')
