@@ -1,0 +1,9 @@
+shift = 3
+table = {
+    **{chr(c): chr((c - 65 + shift) % 26 + 65) for c in range(65, 91)},
+    **{chr(c): chr((c - 97 + shift) % 26 + 97) for c in range(97, 123)}
+}
+trans_table = str.maketrans(table)
+text = "hello Martin my NAME is Xenon and I like II in romans numeric system"
+encrypted = text.translate(trans_table)
+print(encrypted)
