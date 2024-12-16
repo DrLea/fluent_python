@@ -1,0 +1,171 @@
+from collections import namedtuple
+
+# ----------------------------
+# 1. Defining the City namedtuple
+# ----------------------------
+
+# You can create a namedtuple by passing the type name and the field names.
+# Field names can be:
+# 1) A single string separated by spaces or commas, e.g., 'name country population coordinates'
+# 2) An iterable of strings, e.g., ['name', 'country', 'population', 'coordinates']
+#
+# Internally, namedtuples are as memory-efficient as regular tuples,
+# since they don't store attributes per instance; they store them in the class definition.
+# Thus, a namedtuple typically "weighs" the same as a regular tuple.
+
+City = namedtuple('City', 'name country population coordinates')  #  Define namedtuple
+
+# Create an instance of City
+tokyo = City('Tokyo', 'JP', 36.933, (35.689722, 139.691667))      #  Create an instance
+
+# Display the tokyo instance
+print(tokyo)
+# Output:
+# City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722, 139.691667))
+
+# Access population by attribute
+print(tokyo.population)   #  Output: 36.933
+
+# Access coordinates by attribute
+print(tokyo.coordinates)  # Output: (35.689722, 139.691667)
+
+# Access country by index (like a regular tuple)
+print(tokyo[1])           # Output: 'JP'
+
+# ----------------------------
+# 2. Defining Coordinate with Default Values
+# ----------------------------
+
+# Defining a namedtuple with a default value:
+# The 'defaults' parameter (available in Python 3.7+) allows specifying default values for fields.
+Coordinate = namedtuple('Coordinate', 'lat lon reference', defaults=['WGS84'])
+
+# Create an instance of Coordinate with default reference
+coord = Coordinate(0, 0)
+print(coord)
+# Output:
+# Coordinate(lat=0, lon=0, reference='WGS84')
+
+# Access default field values
+print(Coordinate._field_defaults)
+# Output:
+# {'reference': 'WGS84'}
+
+# ----------------------------
+# 3. Extending namedtuple with Additional Functionality
+# ----------------------------
+
+# Define the FrenchDeck class to provide ranks and suits
+class FrenchDeck:
+    # Define the ranks in order from lowest to highest
+    ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    # Define the suits
+    suits = ['clubs', 'diamonds', 'hearts', 'spades']
+
+# Define the Card namedtuple
+Card = namedtuple('Card', 'rank suit')
+
+# Add a class-level dictionary to define suit values
+# Higher numbers can represent higher priority or value
+Card.suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)  #  Add class attribute
+
+# Define a function to calculate the overall rank of a card
+def spades_high(card):  #  Define a function that rates cards according to "spades high" rule
+    """
+    Calculate the overall rank of a card.
+    Spades are considered the highest suit, followed by hearts, diamonds, and clubs.
+    The rank is determined first by the card's rank and then by its suit.
+    """
+    # Get the index of the card's rank in FrenchDeck.ranks
+    rank_value = FrenchDeck.ranks.index(card.rank)
+    # Get the suit value from the suit_values dictionary
+    suit_value = card.suit_values[card.suit]
+    # Calculate overall rank
+    return rank_value * len(card.suit_values) + suit_value
+
+# Attach the spades_high function as a method-like attribute to the Card namedtuple
+Card.overall_rank = spades_high  #  Attach the function as a method-like attribute
+
+# Create instances of Card
+lowest_card = Card('2', 'clubs')
+highest_card = Card('A', 'spades')
+
+# Calculate and display the overall rank of the lowest card
+print(lowest_card.overall_rank())  #  Output: 0
+# Explanation:
+# '2' is the first rank (index 0)
+# 'clubs' has a suit value of 0
+# Overall rank = 0 * 4 + 0 = 0
+
+# Calculate and display the overall rank of the highest card
+print(highest_card.overall_rank())  
+# Output: 51
+# Explanation:
+# 'A' is the last rank (index 12)
+# 'spades' has a suit value of 3
+# Overall rank = 12 * 4 + 3 = 51
+
+# ----------------------------
+# 4. Understanding the Output
+# ----------------------------
+
+# When you run the above code, you should see the following output:
+#
+# City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722, 139.691667))
+# 36.933
+# (35.689722, 139.691667)
+# JP
+# Coordinate(lat=0, lon=0, reference='WGS84')
+# {'reference': 'WGS84'}
+# 0
+# 51
+
+# ----------------------------
+# 5. Additional Notes
+# ----------------------------
+
+# - **namedtuple Weighs the Same as Tuple:**
+#   Namedtuples are designed to be memory-efficient and have the same memory footprint as regular tuples.
+#   They achieve this by storing field names in the class definition rather than in each instance.
+
+# - **Passing Field Names:**
+#   When creating a namedtuple, field names can be passed as:
+#   1. A single string with space or comma-separated field names:
+#      ```python
+#      City = namedtuple('City', 'name country population coordinates')
+#      ```
+#   2. An iterable (like a list or tuple) of field name strings:
+#      ```python
+#      City = namedtuple('City', ['name', 'country', 'population', 'coordinates'])
+#      ```
+
+# - **Extending namedtuple:**
+#   While namedtuples are immutable and lightweight, extending them with methods can be done by:
+#   1. Adding functions and attaching them as attributes (as shown above).
+#   2. Subclassing namedtuple to create a new class with additional methods.
+
+# - **Subclassing Example:**
+#   If you prefer a more object-oriented approach, you can subclass `Card` to include methods:
+
+#   ```python
+#   class Card(namedtuple('CardBase', 'rank suit')):
+#       suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
+        
+#       def overall_rank(self):
+#           rank_value = FrenchDeck.ranks.index(self.rank)
+#           suit_value = self.suit_values[self.suit]
+#           return rank_value * len(self.suit_values) + suit_value
+
+#   # Usage
+#   lowest_card = Card('2', 'clubs')
+#   highest_card = Card('A', 'spades')
+#   
+#   print(lowest_card.overall_rank())  # Output: 0
+#   print(highest_card.overall_rank()) # Output: 51
+#   ```
+
+# This subclassing approach allows you to define methods directly within the `Card` class, making the code cleaner and more intuitive.
+
+# ----------------------------
+# 6. Summary
+# ----------------------------
