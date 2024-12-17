@@ -1,0 +1,149 @@
+from dataclasses import dataclass, field
+
+
+@dataclass(init=True, repr=True, eq=True, order=False,
+              unsafe_hash=False, frozen=False)
+class AllExplicit:
+    a: int
+
+
+# In default dataclass withour arguments
+# An __init__ method.
+# A __repr__ method.
+# An __eq__ method.
+# Are set
+
+# order adds auto created _eq _le _gt and etc
+# to compare instances according to their fields from top to the bottom
+# field helps us exclude some attrs from comparisons
+@dataclass(order=True)
+class Person:
+    id: int = field(compare=False)
+    money: int
+    age: int
+
+a = Person(id=1, money=200, age=20)
+b = Person(id=2, money=100, age=40)
+c = Person(id=3, money=200, age=45)
+print('a<b:',a<b, 'b<c', b<c, 'a<c', a<c)
+
+# unsafe_hash is used to force dataclass creating __hash__ method even if it is mutable
+# in standard dataclass __hash__ method is created if frozen and eq are defined as True
+
+@dataclass(unsafe_hash=True)
+class Unhashable:
+    a: int
+    b: str
+
+d = Unhashable(a=10, b='hi')
+temp = {d: 15}
+print(temp[d])
+d.a = 123
+try:
+    print(temp[d])
+except KeyError as e:
+    print(e)
+
+# frozen makes class immutable... almost
+
+@dataclass(frozen=True)
+class Frozen:
+    a: int
+    b: str
+    __c: int = 100
+
+d = Frozen(a=10, b='123')
+print(d)
+try:
+    d.a = 123
+except Exception as e:
+    print(e)
+
+object.__setattr__(d, 'a', 11)
+object.__setattr__(d, '_Frozen__c', 111)
+print(d)
+
+
+# field also helps us setting mutable objects as defaults 
+# using default_factory that takes 0-argument funcs to be called
+# we can also use field(hash=False, repr=False) and etc to exclude or include fields to funct
+# kw_arg to make it reachable from key_word only
+try:
+    @dataclass
+    class Room:
+        size: int = 10
+        items: list = []
+except Exception as e:
+    print(e)
+
+    
+@dataclass
+class Room:
+    size: int = 10
+    items: list = field(default_factory=list)
+r = Room()
+print(r)
+
+# __post_init__, class_attrs, instance_attrs, temp variables
+# when dataclass sees __post_init__ it automatically creates its call at the end of __init__
+
+@dataclass
+class ClubMember:
+    name: str
+
+@dataclass
+class HackerClubMember(ClubMember):
+    all_handles = set()
+    handle: str = ''
+    def __post_init__(self):
+        cls = self.__class__
+        if self.handle == '':
+            self.handle = self.name.split()[0]
+        if self.handle in cls.all_handles:
+            msg = f'handle {self.handle!r} already exists.'
+            raise ValueError(msg)
+        cls.all_handles.add(self.handle)
+
+
+anna = HackerClubMember(name='Anna Pak')
+try:
+    anee = HackerClubMember(name='Anna Khripchenko')
+except Exception as e:
+    print(e)
+
+# if we would give all_handles annotation it would be considered as instance attribute not class one
+# but we can still do it using typing ClassVar
+from typing import ClassVar
+@dataclass
+class HackerClubMember(ClubMember):
+    all_handles: ClassVar[set[str]] = set()
+    handle: str = ''
+    def __post_init__(self):
+        cls = self.__class__
+        if self.handle == '':
+            self.handle = self.name.split()[0]
+        if self.handle in cls.all_handles:
+            msg = f'handle {self.handle!r} already exists.'
+            raise ValueError(msg)
+        cls.all_handles.add(self.handle)
+
+
+anna = HackerClubMember(name='Anna Pak')
+try:
+    anee = HackerClubMember(name='Anna Khripchenko')
+except Exception as e:
+    print(e)
+
+
+# we can also define temp variables that are not gonna be bound to entities or class
+from dataclasses import InitVar
+@dataclass
+class C:
+    i: int
+    j: int = None
+    database: InitVar[dict] = None
+    def __post_init__(self, database):
+        if self.j is None and database is not None:
+            self.j = database.get('j')
+a = C(i=15, database={'j': 12})
+print(a)
