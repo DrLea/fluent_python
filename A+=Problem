@@ -1,0 +1,47 @@
+t1 = (1, 2, [1, 2])
+t2 = (1, 2, [1, 2])
+print('Initial:')
+print('t1 == t2:', t1 == t2)
+print('id(t1):', id(t1[-1]))
+print('t1:', t1)
+t1[-1].append(3)
+print('\nAfter t1[-1].append(3):')
+print('Initial:')
+print('t1 == t2:', t1 == t2)
+print('id(t1):', id(t1[-1]))
+print('t1:', t1)
+
+print('\nA += problem:')
+print('t1[-1] += [4]')
+# t1[-1] += [4]  # raises exception but assigns new element
+# (1, 2, [1, 2, 3, 4])
+# Tuple is imutable
+
+
+
+"""
+ >>> dis.dis('s[a] += b')
+ 1       
+0 LOAD_NAME 
+3 LOAD_NAME 
+6 DUP_TOP_TWO
+ 7 BINARY_SUBSCR        
+8 LOAD_NAME 
+11 INPLACE_ADD        
+12 ROT_THREE
+ 13 STORE_SUBSCR        
+14 LOAD_CONST 
+17 RETURN_VALUE
+ 0 (s)
+ 1 (a)
+ 2 (b)
+ 
+ 
+ 
+ 0 (None)
+ 	Поместить	значение	s[a]	на	вершину	стека	(TOS).
+ 	Выполнить	TOS += b.	Эта	операция	завершается	успешно,	если	TOS	ссылается	
+на	изменяемый	объект	(в примере 2.17	это	список).
+ 	Выполнить	присваивание	s[a] = TOS.	Эта	операция	завершается	неудачно,	
+если	s –	неизменяемый	объект	(в примере 2.17	это	кортеж	t).
+"""
