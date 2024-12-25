@@ -1,0 +1,169 @@
+l1 = [3, [66, 55, 44], (7, 8, 9)]
+l2 = l1[:]  # the same as l2 = list(l1)
+l1.append(100)    
+l1[1].remove(55)
+print('l1:', l1)
+print('l2:', l2)
+l2[1] += [33, 22]
+l2[2] += (10, 11)
+print('l1:', l1)
+print('l2:', l2)
+
+# link to visualized debuger
+# https://pythontutor.com/render.html#code=l1%20%3D%20%5B3,%20%5B66,%2055,%2044%5D,%20%287,%208,%209%29%5D%0Al2%20%3D%20l1%5B%3A%5D%20%20%0Al1.append%28100%29%20%20%20%20%0Al1%5B1%5D.remove%2855%29%0Aprint%28'l1%3A',%20l1%29%0Aprint%28'l2%3A',%20l2%29%0Al2%5B1%5D%20%2B%3D%20%5B33,%2022%5D%0Al2%5B2%5D%20%2B%3D%20%2810,%2011%29%0Aprint%28'l1%3A',%20l1%29%0Aprint%28'l2%3A',%20l2%29&cumulative=false&curInstr=10&heapPrimitives=nevernest&mode=display&origin=opt-frontend.js&py=3&rawInputLstJSON=%5B%5D&textReferences=false
+
+
+
+# copy and deep copy
+import copy
+
+
+class Bus:
+    def __init__(self, passengers=None):
+        if passengers is None:
+            self.passengers = []
+        else:
+            self.passengers = list(passengers)
+
+    def pick(self, name):
+        self.passengers.append(name)
+
+    def drop(self, name):
+        self.passengers.remove(name)
+
+
+bus1 = Bus(['Alice', 'Bill', 'Claire', 'David'])
+bus2 = copy.copy(bus1)
+bus3 = copy.deepcopy(bus1)
+bus1.drop('David')
+print(id(bus1))
+print(id(bus2))
+print(id(bus3))
+print(bus1.passengers)
+print(bus2.passengers)
+print(bus3.passengers)
+print(id(bus1.passengers))
+print(id(bus2.passengers))
+print(id(bus3.passengers))
+print('\n\n')
+
+
+
+# default value is mutable NOT OK
+class Box:
+    def __init__(self, items = []):
+        self.items = items  # this line is wrong! items is not a list but a reference to a list.
+
+    def __add__(self, other):
+        self.items.append(other)
+        return self.items
+    
+    def __str__(self):
+        return str(self.items)
+
+# OK
+
+box1 = Box([1,2])
+box1 + 2
+print(box1)
+box2 = Box()
+print(box2)
+box2 + 1
+print(box1)
+print('\n\n')
+
+# NOT OK
+
+box1 = Box()
+box1 + 2
+print(box1)
+box2 = Box()
+print(box2)
+box2 + 1
+print(box1)
+print('\n\n')
+
+
+print(Box.__init__.__defaults__[0] is box2.items)
+
+
+print('\n\n')
+
+
+# class attribute NOT OK
+class Box:
+    items = []
+
+    def __add__(self, other):
+        self.items.append(other)
+        return self.items
+    
+    def __str__(self):
+        return str(self.items)
+
+
+box1 = Box()
+box1 + 2
+print(box1)
+box2 = Box()
+print(box2)
+box2 + 1
+print(box1)
+print('\n\n')
+
+
+# OK with field default_factory in dataclasses
+
+from dataclasses import field, dataclass
+
+
+@dataclass
+class Box:
+    items: list = field(default_factory=list)
+    def __add__(self, other):
+        self.items.append(other)
+        return self.items
+    
+    def __str__(self):
+        return str(self.items)
+
+# OK
+
+box1 = Box()
+box1 + 2
+print(box1)
+box2 = Box()
+print(box2)
+box2 + 1
+print(box1)
+print('\n\n')
+
+
+# Normal Bus with list(passengers)
+team = ['Alice', 'Bill', 'Claire', 'David']
+b1 = Bus(team)
+b1.drop('Alice')
+print(team)
+print('\n\n')
+
+
+# Wrong Bus without list() direct assignment does not create copy so all members of team that drop from bus drop from life))
+class KillerBus:
+    def __init__(self, passengers=None):
+        if passengers is None:
+            self.passengers = []
+        else:
+            self.passengers = passengers
+
+    def pick(self, name):
+        self.passengers.append(name)
+
+    def drop(self, name):
+        self.passengers.remove(name)
+
+# outer list is being changed by func
+team = ['Alice', 'Bill', 'Claire', 'David']
+kb1 = KillerBus(team)
+kb1.drop('Alice')
+print(team)
+print('\n\n')
