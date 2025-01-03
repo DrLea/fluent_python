@@ -1,0 +1,97 @@
+# del deletes reference not object, object can be deleted as side effect if all references are removed grabage collector deletes object
+import weakref
+
+s1 = {1, 2, 3}
+s2 = s1
+def bye():
+    print('...like tears in the rain.')
+ender = weakref.finalize(s1, bye)  # weakref does not increase reference counter, useful for caching and avoiding cycle reference
+print(ender.alive)
+del s1
+print(ender.alive)
+s2 = 'spam'
+print(ender.alive)
+
+def aaa(weak_ref):
+    print('aaa')
+
+s3 = weakref.ref(s1, aaa)  # aaa is optional
+print(weakref.getweakrefcount(s1))
+print(weakref.getweakrefs(s1))
+print(s3())
+del s1, s2
+print(s3())
+
+
+class MyClass:
+    def __init__(self, name):
+        self.name = name
+    
+    def greet(self):
+        return f"Hello from {self.name}"
+
+obj = MyClass("Proxy Example")
+
+proxy_obj = weakref.proxy(obj) # creates proxy that does not keep alive obj
+
+print(proxy_obj.greet())  # "Hello from Proxy Example"
+
+# Remove the strong reference
+del obj
+
+# Attempting to use the proxy now will raise ReferenceError
+try:
+    print(proxy_obj.greet())
+except ReferenceError as e:
+    print(e)
+
+
+class MyClass:
+    def __init__(self, name):
+        self.name = name
+
+data_store = weakref.WeakValueDictionary()
+obj1 = MyClass("Object 1")
+obj2 = MyClass("Object 2")
+
+# Insert objects into the WeakValueDictionary
+data_store['key1'] = obj1
+data_store['key2'] = obj2
+
+print("Before deletion:", list(data_store.items()))
+# [('key1', <__main__.MyClass object at ...>), ('key2', <__main__.MyClass object at ...>)]
+
+del obj1
+del obj2
+
+# Now if garbage collection has happened, those entries disappear
+import gc
+gc.collect()
+
+print("After GC:", list(data_store.items()))
+# [] or possibly [some items] if GC hasn't yet run automatically
+
+
+class Widget:
+    def __init__(self, name):
+        self.name = name
+
+key_dict = weakref.WeakKeyDictionary()
+
+k1 = Widget("Widget 1")
+k2 = Widget("Widget 2")
+
+key_dict[k1] = "Data for k1"
+key_dict[k2] = "Data for k2"
+
+print("Before deletion:", list(key_dict.items()))
+# [(<__main__.Widget object at ...>, 'Data for k1'), (<__main__.Widget object at ...>, 'Data for k2')]
+
+del k1
+del k2
+
+gc.collect()
+
+# After GC, these entries are gone
+print("After GC:", list(key_dict.items()))
+# []
