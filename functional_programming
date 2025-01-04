@@ -1,0 +1,52 @@
+"""
+Я	никогда	не считал,	что	на	Python	оказали	заметное	влияние	функцио
+нальные	языки,	что	бы	кто	об	этом	ни	говорил	или	ни	думал.	Я был	значи
+тельно	лучше	знаком	с императивными	языками	типа	C и	Algol	68	и,	хотя	
+сделал	функции	полноправными	объектами,	никогда	не рассматривал	
+Python	как	язык	функционального	программирования.–	Гвидо	ван	Россум,	пожизненный	великодушный	диктатор	Python1
+"""
+
+# Using map
+nums = [1, 2, 3, 4]
+squared = map(lambda x: x**2, nums)
+print(list(squared))  # Output: [1, 4, 9, 16]  Returns generator
+
+# Alternative: List comprehension
+squared = [x**2 for x in nums]
+print(squared)  # Output: [1, 4, 9, 16]  Returns List
+
+
+# Using filter
+nums = [1, 2, 3, 4, 5, 6]
+even_nums = filter(lambda x: x % 2 == 0, nums)
+print(list(even_nums))  # Output: [2, 4, 6]   Returns generator
+
+# Alternative: List comprehension with condition
+even_nums = [x for x in nums if x % 2 == 0]
+print(even_nums)  # Output: [2, 4, 6]    Returns List
+
+
+
+from functools import reduce
+
+# Using reduce
+nums = [1, 2, 3, 4]
+product = reduce(lambda x, y: x * y, nums)
+print(product)  # Output: 24
+
+# Alternative: Loop
+product = 1
+for num in nums:
+    product *= num
+print(product)  # Output: 24
+
+
+
+# Using apply in Python 2   (In Python 3 removed, outdated)
+def add(a, b):
+    return a + b
+
+args = (2, 3)
+# result = apply(add, args)
+# print(result)  # Output: 5
+# can be achieved with unpacking *
