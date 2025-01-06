@@ -1,0 +1,25 @@
+def custom_partial(func, /, *args, **kwargs):
+    if not callable(func):
+        raise ValueError("First argument must be callable")
+    def modified(*original_args, **original_kwargs):
+        return func(*args, *original_args, **{**kwargs, **original_kwargs})
+    return modified
+
+def mul(*args, **kwargs):
+    for k, v in kwargs.items():
+        print(k, v)
+    if not args:
+        return 0
+    result = args[0]
+    for i in args[1:]:
+        result *= i
+    return result
+
+
+from functools import partial
+
+tens = partial(mul, 5, 2, a=10, b=12)
+dozens = custom_partial(mul, 3, 4, a=10, b=12)
+
+print(tens(5, b=15))  # Output: 50
+print(dozens(5, b=15)) # Output: 60
