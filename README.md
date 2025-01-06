@@ -47,3 +47,15 @@
 - **Use Cases:**  
   - **Dictionaries:** Fast lookups by key, maintaining order.
   - **Sets:** Quick membership tests, removing duplicates efficiently.
+
+
+## Notes
+- **Deletion:**
+  - **__del__** does not delete an object it deletes a reference. The object is deleted by the garbage collector when no more references are left
+  - **weakref** is used to create references but don't increase the reference counter, so do not promise that the object will not be removed by gc
+ 
+- **Annotation**
+  - **compilers**: MyPy (strict), PyPy (has JIT that analyzes code and optimizes it by putting types), PyCharm's. Blue, Black and 8flake technologies used to follow all PEP standards
+  - **validation** to validate a*b we have to know their type thus int*dict. The compiler does not multiply them it just checks that both types have the __mul__ method inside
+  - **validation_types**: There are **DuckValidation** used in Python, JS, Dart and **Nominal** used in C++, Java and C#. Duck validation allows methods of child class to its parent validation. Nominal does not because it is checked once in creation.
+  - **LSP** Barbara Liskov MIT prof. and nominate Turing laureate claimed that if P1 was inherited from P2 it cannot be used to type hint P2. But it can pass where P2 is expected 
