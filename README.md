@@ -62,4 +62,42 @@
   - **compilers**: MyPy (strict), PyPy (has JIT that analyzes code and optimizes it by putting types), PyCharm's. Blue, Black and 8flake technologies used to follow all PEP standards
   - **validation** to validate a*b we have to know their type thus int*dict. The compiler does not multiply them it just checks that both types have the __mul__ method inside
   - **validation_types**: There are **DuckValidation** used in Python, JS, Dart and **Nominal** used in C++, Java and C#. Duck validation allows methods of child class to its parent validation. Nominal does not because it is checked once in creation.
-  - **LSP** Barbara Liskov MIT prof. and nominate Turing laureate claimed that if P1 was inherited from P2 it cannot be used to type hint P2. But it can pass where P2 is expected 
+  - **LSP** Barbara Liskov MIT prof. and nominate Turing laureate claimed that if P1 was inherited from P2 it cannot be used to type hint P2. But it can pass where P2 is expected
+ 
+- **N + 1 problem**
+  Imagine simple classes
+  ```python
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+
+class Book(models.Model):
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+```
+if we execute code like this
+```python
+books = Book.objects.all()
+for book in books:
+    print(book.title, book.author.name)
+```
+under the hood it will execute `SELECT * FROM book;` one time and `SELECT * FROM author WHERE id = <author_id>;` for each book so if there are 100 books it will be 1 + 100 queries to db
+to fix this problem we can use select_related for ForeignKey relationship and prefetch_related for M2M
+```python
+books = Book.objects.select_related('author')
+for book in books:
+    print(book.title, book.author.name)
+```
+Django will execute one query with JOIN
+```SQL
+SELECT * FROM book
+INNER JOIN author ON book.author_id = author.id;
+```
+or prefetch_related in this case
+```python
+authors = Author.objects.prefetch_related('book_set')
+for author in authors:
+    for book in author.book_set.all():
+        print(author.name, book.title)
+```
+it will execute 2 queries one for the authors and another for books related to them
+if this optimization is not enough we can always use annotate and values or write raw SQL
