@@ -66,7 +66,7 @@
  
 - **N + 1 problem**
   Imagine simple classes
-  ```python
+```python
 class Author(models.Model):
     name = models.CharField(max_length=100)
 
