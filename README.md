@@ -65,7 +65,8 @@
   - **LSP** Barbara Liskov MIT prof. and nominate Turing laureate claimed that if P1 was inherited from P2 it cannot be used to type hint P2. But it can pass where P2 is expected
  
 - **N + 1 problem**
-  Imagine simple classes
+
+Imagine simple classes
 ```python
 class Author(models.Model):
     name = models.CharField(max_length=100)
