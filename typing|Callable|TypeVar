@@ -1,0 +1,87 @@
+# Main notice
+def func(a: str | None, b: str | None):
+    return a, b
+
+try:
+    print(func(a='gse'))
+except Exception as e:
+    print(e)
+
+def func(a: str | None = 'lolo', b: str | None = 'pupu'):
+    return a, b
+
+print(func(b='gse'))
+### typehints are used only to hint us. Even if we say that it can be None we still have to send default value othervise we have to implicitly say it is None as in normal implementation
+
+
+# typing.Callable
+# Callable[[Param1Type, Param2Type], ReturnType]    Params can be empty as well Callable[[], None]
+
+from typing import Callable
+from dataclasses import dataclass
+
+
+def func_gen() -> Callable[[int, str], int]:
+    return lambda a, b: a * b
+
+def class_gen() -> Callable[[str, int], None]:
+    @dataclass
+    class Person:
+        name: str
+        age: int
+    return Person
+
+
+fun = func_gen()
+print(fun(5, ' S0S '))
+class_ = class_gen()
+print(class_('Alex', 41))
+
+
+# TypeVar works only with MyPy and other static testers
+
+from typing import TypeVar
+
+T = TypeVar('T')
+
+def identity(value: T) -> T:
+    return value
+
+print(identity(42))        # int -> int
+print(identity("hello"))   # str -> str
+
+
+from typing import Generic, TypeVar
+
+T = TypeVar('T')
+
+class Box(Generic[T]):
+    def __init__(self, content: T):
+        self.content = content
+
+    def get_content(self) -> T:
+        return self.content
+
+box = Box(123)  # Box[int]
+print(box.get_content())  # int
+
+
+T = TypeVar('T', int, float)  # T can only be int or float
+
+def add(x: T, y: T) -> T:
+    return x + y
+
+print(add(1, 2))    # Works (int)
+print(add(1.0, 2.0))  # Works (float)
+
+
+
+from typing import TypeVar
+
+T = TypeVar('T', bound=float)
+
+def uppercase(value: T) -> T:
+    return value
+
+print(uppercase(31))  # Works coz int is subtype of float
+print(uppercase('sg'))  # works but mypy will raise an error
