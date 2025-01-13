@@ -1,0 +1,24 @@
+# decorators are being called once module is loaded
+
+def decor(func):
+    print('decorating', func)
+    return func
+
+
+@decor
+def some_func():
+    print('inside some_func')
+
+
+def another_func():
+    print('inside another_func')
+
+
+def main():
+    some_func()
+    another_func()
+
+# if __name__ == '__main__':
+#     main()
+
+# even if main is commented we will see **decorating func**
