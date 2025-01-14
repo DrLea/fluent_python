@@ -50,7 +50,18 @@
  
 ## Raw book parts
 - According to PEP 484, int is compatible with float, and float is compatible with complex. In practice, this makes sense because int supports all the operations float does, plus additional ones like &, |, <<, etc. As a result, int is also compatible with complex. For example, if i = 3, then i.real is 3 and i.imag is 0.
-- 
+- **Closures**
+Logic of Variable Lookup
+
+When encountering a function definition, the Python bytecode compiler determines how to find a variable x encountered within it, guided by the following rules:
+If there is a global x declaration, then x is taken from it and assigned to the global variable x at the module level.
+If there is a nonlocal x declaration, then x is taken from it and assigned to the local variable x in the nearest enclosing function where x is defined.
+If x is a parameter or is assigned a value in the body of the function, then x is a local variable.
+If there is a reference to x, but it is neither assigned a value nor a parameter, then:
+
+  - x is searched for in the local scopes of the bodies of enclosing functions (nonlocal scopes).
+  - If it is not found in the enclosing scopes, it is read from the global scope of the module.
+  - If it is not found in the global scope either, it is read from __builtins__.__dict__.
 
 
 ## Notes
