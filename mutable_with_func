@@ -1,0 +1,19 @@
+a = 5
+b = [1, 2, 3, [1, 2]]
+
+print (a,b)
+def modify(im, mu):
+    global b
+    global a
+    print(id(a), id(im), a is im)
+    print(id(b), id(mu), b is mu)
+    im += 8
+    mu.append(2)
+    mu[0] = 4
+    mu[3][0] = 3
+    print(im, mu)
+    print(id(a), id(im), a is im)
+    print(id(b), id(mu), b is mu)
+
+modify(a, b)
+print(a,b)
