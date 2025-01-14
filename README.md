@@ -50,7 +50,8 @@
  
 ## Raw book parts
 - According to PEP 484, int is compatible with float, and float is compatible with complex. In practice, this makes sense because int supports all the operations float does, plus additional ones like &, |, <<, etc. As a result, int is also compatible with complex. For example, if i = 3, then i.real is 3 and i.imag is 0.
-- **Closures**
+- **Closures** Scope (Замыкания)
+  
 Logic of Variable Lookup
 
 When encountering a function definition, the Python bytecode compiler determines how to find a variable x encountered within it, guided by the following rules:
