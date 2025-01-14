@@ -1,0 +1,32 @@
+# LEGB (local, enclosed, global, built-in) this is how names are looked up
+
+# HARD interview question
+b = 10
+
+def func(a):
+    print(a)
+    print(b)
+    b = 3
+
+try:
+    func(5)  # will raise an Error coz func looks for local b that is not yet defined 
+except Exception as e:
+    print(e)
+
+def func1(a):
+    global b  # using global b
+    print(a)
+    print(b)
+    b = 3
+
+func1(4)
+
+def func2():
+    b = 12
+    def func3(a):
+        nonlocal b # nonlocal searches in the nearest scope up in nested relation. But it should not be global
+        print(a)
+        print(b)
+    return func3
+
+func2()(0)
