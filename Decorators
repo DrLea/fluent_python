@@ -1,0 +1,135 @@
+def decor(func):
+    def wrapper(*args, **kwargs):
+        print("Inside Decorator")
+        return func(*args, **kwargs)
+    return wrapper
+
+@decor
+def some_func(a, b, c):
+    print(f"a: {a}, b: {b}, c: {c}")
+
+def another_func(a, b, c):
+    print(f"a: {a}, b: {b}, c: {c}")
+
+some_func(1, 2, 3)
+another_func(1, 2, 3)
+print(some_func.__name__, another_func.__name__)
+
+
+from functools import wraps
+
+
+def decor(func):
+    @wraps(func)  # copies all attrs to new func
+    def wrapper(*args, **kwargs):  
+        print("Inside Decorator")
+        return func(*args, **kwargs)
+    return wrapper
+
+@decor
+def some_func(a, b, c):
+    print(f"a: {a}, b: {b}, c: {c}")
+
+def another_func(a, b, c):
+    print(f"a: {a}, b: {b}, c: {c}")
+
+some_func(1, 2, 3)
+another_func(1, 2, 3)
+print(some_func.__name__, another_func.__name__)
+
+
+
+# lru_cache memoization
+import time
+from functools import cache
+from functools import lru_cache
+
+
+def clock(func):
+    def wrapper(*args, **kwargs):
+        wrapper.counter += 1
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        params = [repr(arg) for arg in args]
+        params.extend([f"{k}={v!r}" for k, v in kwargs.items()])
+        print(f"[{(end_time-start_time):0.9f}] {func.__name__}({''.join(params)}) -> {result}")
+        return result
+    
+    wrapper.counter = 0
+    return wrapper
+
+@clock
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n - 2) + fibonacci(n - 1)
+
+@clock
+@cache  # maxsize=None, typed=False
+def fibonacci2(n):
+    if n < 2:
+        return n
+    return fibonacci2(n - 2) + fibonacci2(n - 1)
+
+@clock
+# default 128 to save memory maxsize can be set less 
+# but better to use 2^n or None to sitch off LRU
+# typed=True means that result of func calls f(1) and f(1.0) will be added to cache twice (differenciate float with int)
+@lru_cache(maxsize=4, typed=True) 
+def fibonacci3(n):
+    if n < 2:
+        return n
+    return fibonacci3(n - 2) + fibonacci3(n - 1)
+
+
+print('\n\nwithout memoization\n\n')
+print(fibonacci(4)) # in 20 it executes 21891 times
+print(f'func was called: {fibonacci.counter}')
+print('\n\nwith memoization\n\n')
+print(fibonacci2(4)) # in 20 it executes 39 times
+print(f'func was called: {fibonacci2.counter}')
+print(fibonacci3(4)) # in 40 it executes 79 times
+print(f'func was called: {fibonacci3.counter}')
+
+
+# Single dispatch
+
+from functools import singledispatch
+
+
+@singledispatch
+def typer(a):
+    return f'{a} has type obj'
+
+@typer.register(int)
+def _(a):
+    return f'{a} has type int'
+
+@typer.register(str)
+def _(a):
+    return f'{a} has type str'
+
+print(typer(10))
+
+print(typer('hello'))
+
+print(typer(True))  # will use INT implementation unless more specific is defined
+
+
+
+def factoriy(a, b):  # parameterized decorator also called as decorator factory
+    def decorator(func):  # decorator
+        def wrapper(*args, **kwargs):  # wrapper
+            return func(*args, **kwargs), (a, b)
+        return wrapper
+    return decorator
+
+
+@factoriy(2, 3)
+def multiply(a, b):
+    return a * b
+
+
+print(multiply(4,5))
+
