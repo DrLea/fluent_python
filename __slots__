@@ -1,0 +1,54 @@
+#  slots helps saving memory in 10_000_000 instances Pixel would take 1.5GB RAM but whith __slots__ only 500MB
+
+class Pixel:
+    __slots__ = ('x', 'y')
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+
+p = Pixel(1, 2)
+print(p.x, p.y)
+try:
+    p.color = 'green'
+    print(a.color)
+except Exception as e:
+    print(e)
+
+
+a = lambda : 2
+a.name = 'alex'
+print(a.name) # works coz functions are also object and object has __dict__
+print(a())
+
+
+Pixel.__slots__ = ('x', 'y', 'color')  # wont work coz __slots__ must be there only during initialization of class
+p = Pixel(1, 2)
+print(p.x, p.y)
+try:
+    p.color = 'green'
+    print(a.color)
+except Exception as e:
+    print(e)
+
+class PixelsChild(Pixel):  # __slots__ does not affect on inherited classes so __dict__ and others persist here
+    pass
+
+
+p_child = PixelsChild(1, 2)  # x and y are stored in hidden array coz they are in slots
+print(p_child.x, p_child.y)
+p_child.color = 'green'  # stored in __dict__ coz it is not in slots. So __slots__ are partially inherited
+print(p_child.x, p_child.y, p_child.color)
+
+
+class PixelsChild2(Pixel):
+    __slots__ = ()
+
+
+p_child = PixelsChild2(1, 2)  # still works coz parent has them in __slots__
+print(p_child.x, p_child.y)
+try:
+    p_child.color = 'green'  # won't work coz neither child nor parent has it in __slots__
+    print(p_child.x, p_child.y, p_child.color)
+except Exception as e:
+    print(e)
