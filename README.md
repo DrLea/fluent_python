@@ -64,6 +64,88 @@ If there is a reference to x, but it is neither assigned a value nor a parameter
   - If it is not found in the enclosing scopes, it is read from the global scope of the module.
   - If it is not found in the global scope either, it is read from __builtins__.__dict__.
 
+- **Accessors**
+
+Simplicity in Code: Why You Shouldn't Overcomplicate Access Control
+
+Ward Cunningham, the inventor of wikis and a pioneer of extreme programming, recommends asking yourself:
+
+> "What is the simplest code that will do the job?"
+
+The idea is to focus entirely on the goal. Implementing accessors (getters and setters) from the very beginning can be a distraction from that goal.
+
+This proves that when developing a class, you should always start with the simplest version—keeping attributes public. If, later on, you decide to enforce access control with getter and setter methods, you can do so by implementing properties without modifying any existing code that accesses object components by name (e.g., `x` and `y`).
+
+Example: Starting Simple
+
+```python
+class Protected:
+    def __init__(self):
+        self.x = 'top'
+        self.y = 'secret'
+
+    def say(self):
+        print(self.x, self.y)
+    
+p = Protected()
+p.say()
+p.x = 'not a'
+p.say()
+```
+
+Here, someone can accidentally modify our variables, which might become a concern. When we start caring about protected variables, we can enforce restrictions without refactoring the rest of the code.
+
+Introducing Encapsulation
+
+```python
+class Protected:
+    def __init__(self):
+        self.__x = 'top'
+        self.__y = 'secret'
+
+    @property
+    def x(self):
+        return self.__x
+    
+    @property
+    def y(self):
+        return self.__y
+
+    def say(self):
+        print(self.x, self.y)
+
+p = Protected()
+p.say()
+try:
+    p.x = 'not a'
+    p.say()
+except Exception as e:
+    print(e)
+```
+
+Now, direct modification of the variables is prevented, but we didn't need to change any of our method calls. This demonstrates that there's no need to be overly cautious from the beginning.
+
+Java vs. Python: Misconceptions About Private and Protected Fields
+
+Through years of teaching Python to Java developers, I've realized that many rely too much on Java's access control guarantees. However, in reality, Java's `private` and `protected` modifiers only protect against accidental modifications, not malicious intent.
+
+They provide real security only when an application is deployed with a security manager (see [Java Security Manager](https://docs.oracle.com/javase/tutorial/essential/environment/security.html)). However, such deployments are rare, even in corporate environments.
+
+Breaking Encapsulation with Reflection
+
+In Java, introspection (known as "reflection" in Java terminology) can be used to access private fields:
+
+```java
+Confidential message = new Confidential("top secret text");
+Field secretField = Confidential.class.getDeclaredField("secret");
+secretField.setAccessible(true); // Lock bypassed!
+System.out.println("message.secret = " + secretField.get(message));
+```
+
+This demonstrates that even in languages with strict access control mechanisms, encapsulation is not absolute. Instead of prematurely enforcing access restrictions, it's often better to start simple and only add constraints when they become necessary.
+
+
+
 
 ## Notes
 - **Deletion:**
@@ -116,6 +198,7 @@ it will execute 2 queries one for the authors and another for books related to t
 if this optimization is not enough we can always use annotate and values or write raw SQL
 
 - **dict().keys()**
+  
 Memory Efficiency:
 
 In **Python 2**, dict.keys() created a new list storing all keys.
