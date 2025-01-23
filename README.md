@@ -114,3 +114,14 @@ for author in authors:
 ```
 it will execute 2 queries one for the authors and another for books related to them
 if this optimization is not enough we can always use annotate and values or write raw SQL
+
+- **dict().keys()**
+Memory Efficiency:
+
+In **Python 2**, dict.keys() created a new list storing all keys.
+In **Python 3**, dict.keys() returns a dynamic view that doesn’t copy the keys into a separate list. This saves memory, especially for large dictionaries.
+Performance:
+
+The new dict_keys object is lazy and reflects changes in the dictionary dynamically.
+If you modify the dictionary, dict.keys() will update automatically without needing to create a new list.
+Set-Like Behavior:
