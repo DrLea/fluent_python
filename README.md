@@ -146,13 +146,19 @@ This demonstrates that even in languages with strict access control mechanisms, 
 
 - **Type Systems in Python**
   
-**Duck Typing 🦆**: "If it quacks like a duck, it's a duck!" Python assumes an object is valid if it has the expected behavior, without checking its type explicitly.
+**Duck Typing 🦆**: "If it quacks like a duck, it's a duck!" Python assumes an object is valid if it has the expected behavior, without checking its type explicitly. Does not use isinstance()
+[checks in runtime, structured]
 
-**Goose Typing 🦢**: A stricter approach using Abstract Base Classes (ABC), where objects must explicitly declare compatibility. Introduced in Python 2.6.
+**Goose Typing 🦢**: A stricter approach using Abstract Base Classes (ABC), where objects must explicitly declare compatibility. Introduced in Python 2.6. Uses isinstance()
+[checks in runtime, nominal]
 
 **Static Typing 📏**: Like in Java or C, types are declared in advance using the typing module (since Python 3.5) and verified by external tools.
+[checks statically, structured]
 
 **Static Duck Typing 🏗️**: A mix of duck and static typing, popularized by GO lang. Objects follow an interface (typing.Protocol, added in Python 3.8), but type checking happens before runtime.
+[checks statically, nominal]
+
+
 
 
 
