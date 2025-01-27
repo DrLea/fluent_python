@@ -1,0 +1,36 @@
+from random import shuffle
+
+class MyList:
+    def __init__(self, data: list | None):
+        self.__data = data if data is not None else []
+    
+    def __getitem__(self, index: int):
+        return self.__data[index]
+    
+    def __len__(self):
+        return len(self.__data)
+    
+    def __str__(self):
+        return str(self.__data)
+
+a = MyList(list(range(10)))
+
+print(a[0])  # Should print 0
+print([i for i in a])  # Should print numbers 0-9
+
+# Trying to shuffle - it should fail
+try:
+    shuffle(a)
+    print(a)
+except Exception as e:
+    print(f"Error: {e}")  # Expected error because MyList does not support item assignment
+
+# --- PARTISAN FIX ---
+def set_item(lis, pos, val):
+    lis._MyList__data[pos] = val  # Accessing private variable using name mangling
+
+MyList.__setitem__ = set_item  # Injecting __setitem__ dynamically
+
+# Now shuffle should work
+shuffle(a)
+print(a)  # Prints shuffled MyList
