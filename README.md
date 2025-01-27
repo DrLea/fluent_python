@@ -144,6 +144,16 @@ System.out.println("message.secret = " + secretField.get(message));
 
 This demonstrates that even in languages with strict access control mechanisms, encapsulation is not absolute. Instead of prematurely enforcing access restrictions, it's often better to start simple and only add constraints when they become necessary.
 
+- **Type Systems in Python**
+  
+**Duck Typing 🦆**: "If it quacks like a duck, it's a duck!" Python assumes an object is valid if it has the expected behavior, without checking its type explicitly.
+
+**Goose Typing 🦢**: A stricter approach using Abstract Base Classes (ABC), where objects must explicitly declare compatibility. Introduced in Python 2.6.
+
+**Static Typing 📏**: Like in Java or C, types are declared in advance using the typing module (since Python 3.5) and verified by external tools.
+
+**Static Duck Typing 🏗️**: A mix of duck and static typing, popularized by GO lang. Objects follow an interface (typing.Protocol, added in Python 3.8), but type checking happens before runtime.
+
 
 
 
