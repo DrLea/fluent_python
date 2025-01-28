@@ -228,7 +228,8 @@ Set-Like Behavior:
 
 - **Exceptions**
 
-```BaseException
+```
+BaseException
 ├── SystemExit
 ├── KeyboardInterrupt
 ├── GeneratorExit
@@ -292,4 +293,5 @@ Set-Like Behavior:
         ├── ImportWarning
         ├── UnicodeWarning
         ├── BytesWarning
-        └── ResourceWarning```
+        └── ResourceWarning
+```
