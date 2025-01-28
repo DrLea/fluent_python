@@ -224,3 +224,72 @@ Performance:
 The new dict_keys object is lazy and reflects changes in the dictionary dynamically.
 If you modify the dictionary, dict.keys() will update automatically without needing to create a new list.
 Set-Like Behavior:
+
+
+- **Exceptions**
+
+BaseException
+├── SystemExit
+├── KeyboardInterrupt
+├── GeneratorExit
+└── Exception
+    ├── ArithmeticError
+    │   ├── FloatingPointError
+    │   ├── OverflowError
+    │   └── ZeroDivisionError
+    ├── AssertionError
+    ├── AttributeError
+    ├── BufferError
+    ├── EOFError
+    ├── ImportError
+    │   └── ModuleNotFoundError
+    ├── LookupError
+    │   ├── IndexError
+    │   └── KeyError
+    ├── MemoryError
+    ├── NameError
+    │   └── UnboundLocalError
+    ├── OSError
+    │   ├── BlockingIOError
+    │   ├── ChildProcessError
+    │   ├── ConnectionError
+    │   │   ├── BrokenPipeError
+    │   │   ├── ConnectionAbortedError
+    │   │   ├── ConnectionRefusedError
+    │   │   └── ConnectionResetError
+    │   ├── FileExistsError
+    │   ├── FileNotFoundError
+    │   ├── InterruptedError
+    │   ├── IsADirectoryError
+    │   ├── NotADirectoryError
+    │   ├── PermissionError
+    │   ├── ProcessLookupError
+    │   └── TimeoutError
+    ├── ReferenceError
+    ├── RuntimeError
+    │   ├── NotImplementedError
+    │   ├── RecursionError
+    │   └── FileNotFoundError (alias)
+    ├── StopAsyncIteration
+    ├── StopIteration
+    ├── SyntaxError
+    │   └── IndentationError
+    │       └── TabError
+    ├── SystemError
+    ├── TypeError
+    ├── ValueError
+    │   └── UnicodeError
+    │       ├── UnicodeDecodeError
+    │       ├── UnicodeEncodeError
+    │       └── UnicodeTranslateError
+    ├── Warning
+        ├── DeprecationWarning
+        ├── PendingDeprecationWarning
+        ├── RuntimeWarning
+        ├── SyntaxWarning
+        ├── UserWarning
+        ├── FutureWarning
+        ├── ImportWarning
+        ├── UnicodeWarning
+        ├── BytesWarning
+        └── ResourceWarning
