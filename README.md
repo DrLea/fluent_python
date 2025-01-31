@@ -295,3 +295,205 @@ BaseException
         ├── BytesWarning
         └── ResourceWarning
 ```
+
+**SOLID Principles in Python**
+
+**S**ingle Responsibility Principle (SRP)
+Each class should have only one reason to change.
+
+*Bad Example:*
+
+```python
+class ReportManager:
+    def generate(self, data):
+        return f"Report: {data}"
+    
+    def save(self, report, filename):
+        with open(filename, "w") as f:
+            f.write(report)
+```
+
+*Why?* This class has two responsibilities: generating and saving reports.
+
+*Good Example:*
+
+```python
+class ReportGenerator:
+    def generate(self, data):
+        return f"Report: {data}"
+
+class ReportSaver:
+    def save(self, report, filename):
+        with open(filename, "w") as f:
+            f.write(report)
+```
+
+*Why?* Each class now has a single responsibility.
+
+**O**pen/Closed Principle (OCP)
+Software entities should be open for extension but closed for modification.
+
+*Bad Example:*
+
+```python
+class Discount:
+    def apply(self, price, customer_type):
+        if customer_type == "regular":
+            return price * 0.9
+        elif customer_type == "vip":
+            return price * 0.8
+```
+
+*Why?* Adding new discount types requires modifying the class.
+
+*Good Example:*
+
+```python
+from abc import ABC, abstractmethod
+
+class Discount(ABC):
+    @abstractmethod
+    def apply(self, price):
+        pass
+
+class RegularDiscount(Discount):
+    def apply(self, price):
+        return price * 0.9
+
+class VIPDiscount(Discount):
+    def apply(self, price):
+        return price * 0.8
+```
+
+*Why?* New discount types can be added without modifying existing code.
+
+**L**iskov Substitution Principle (LSP)
+Subtypes must be substitutable for their base types without altering program correctness.
+
+*Bad Example:*
+
+```python
+class Bird:
+    def fly(self):
+        return "I can fly"
+
+class Ostrich(Bird):
+    def fly(self):
+        return "I can't fly"
+```
+
+*Why?* Ostrich violates LSP because it changes the expected behavior.
+
+*Good Example:*
+
+```python
+class Bird:
+    pass
+
+class FlyingBird(Bird):
+    def fly(self):
+        return "I can fly"
+
+class Ostrich(Bird):
+    pass
+```
+
+*Why?* The hierarchy now properly separates birds that can fly and those that cannot.
+
+**I**nterface Segregation Principle (ISP)
+Clients should not be forced to depend on interfaces they do not use.
+
+*Bad Example:*
+
+```python
+class Machine:
+    def print(self):
+        pass
+    
+    def scan(self):
+        pass
+```
+
+*Why?* A class that only prints still has to implement `scan`.
+
+*Good Example:*
+
+```python
+from abc import ABC, abstractmethod
+
+class Printer(ABC):
+    @abstractmethod
+    def print(self):
+        pass
+
+class Scanner(ABC):
+    @abstractmethod
+    def scan(self):
+        pass
+
+class MultifunctionPrinter(Printer, Scanner):
+    def print(self):
+        return "Printing"
+    
+    def scan(self):
+        return "Scanning"
+```
+
+*Why?* Separate interfaces ensure classes only implement what they need.
+
+**D**ependency Inversion Principle (DIP)
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+
+*Bad Example:*
+
+```python
+class MySQLDatabase:
+    def connect(self):
+        return "Connected to MySQL"
+
+class Application:
+    def __init__(self):
+        self.db = MySQLDatabase()
+
+    def start(self):
+        return self.db.connect()
+```
+
+*Why?* The Application is tightly coupled to MySQLDatabase.
+
+*Good Example:*
+
+```python
+from abc import ABC, abstractmethod
+
+class Database(ABC):
+    @abstractmethod
+    def connect(self):
+        pass
+
+class MySQLDatabase(Database):
+    def connect(self):
+        return "Connected to MySQL"
+
+class PostgreSQLDatabase(Database):
+    def connect(self):
+        return "Connected to PostgreSQL"
+
+class Application:
+    def __init__(self, db: Database):
+        self.db = db
+
+    def start(self):
+        return self.db.connect()
+
+# Injecting dependency
+mysql_db = MySQLDatabase()
+app = Application(mysql_db)
+print(app.start())
+```
+
+*Why?* Application now depends on an abstraction, making it flexible and extensible.
+
+These principles help write maintainable, scalable, and robust Python applications.
+
+
