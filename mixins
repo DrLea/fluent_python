@@ -1,0 +1,45 @@
+import collections
+
+def _upper(key):
+    try:
+        return key.upper()
+    except AttributeError:
+        return key
+
+class UpperCaseMixin:
+    """Mixin to convert string keys to uppercase."""
+    
+    def __setitem__(self, key, item):
+        super().__setitem__(_upper(key), item)
+    
+    def __getitem__(self, key):
+        return super().__getitem__(_upper(key))
+    
+    def get(self, key, default=None):
+        return super().get(_upper(key), default)
+    
+    def __contains__(self, key):
+        return super().__contains__(_upper(key))
+
+# Mixins should always appear first in MRO (Method Resolution Order)
+class UpperDict(UpperCaseMixin, collections.UserDict):
+    """Dictionary that converts string keys to uppercase."""
+    pass
+
+class UpperCounter(UpperCaseMixin, collections.Counter):
+    """Specialized 'Counter' that converts string keys to uppercase."""
+    pass
+
+# Testing UpperDict
+if __name__ == "__main__":
+    d = UpperDict([('a', 'letter A'), (2, 'digit two')])
+    print(list(d.keys()))  # ['A', 2]
+    
+    d['b'] = 'letter B'
+    print('b' in d)  # True
+    print(d['a'], d.get('B'))  # ('letter A', 'letter B')
+    print(list(d.keys()))  # ['A', 2, 'B']
+
+    # Testing UpperCounter
+    c = UpperCounter('BaNanA')
+    print(c.most_common())  # [('A', 3), ('N', 2), ('B', 1)]
