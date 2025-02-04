@@ -1,0 +1,32 @@
+class A:
+    def ping(self):
+        print(f'{self} ping in A')
+
+
+class B(A):
+    def ping(self):
+        print(f'{self} ping in B')
+        super().ping()
+
+
+class C(A):
+    def ping(self):
+        print(f'{self} ping in C')
+        super().ping()
+
+
+class D(B, C):
+    def ping(self):
+        print(f'{self} ping in D')
+        super().ping()
+
+
+class E(D):
+    def ping(self):
+        super().ping()
+
+
+e = E()
+
+e.ping()
+print(E.__mro__)  # creates list of parents according to C3 algorithm (from first glance looks like BFS)
