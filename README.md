@@ -164,6 +164,8 @@ This demonstrates that even in languages with strict access control mechanisms, 
 
 
 ## Notes
+- **MRO**
+    - CLASS.__mro__ or mro() returns order in which classes are inheriting their methods. Uses C3 algorithm to work (from first glance looks like BFS)
 - **Deletion:**
   - **__del__** does not delete an object it deletes a reference. The object is deleted by the garbage collector when no more references are left
   - **weakref** is used to create references but don't increase the reference counter, so do not promise that the object will not be removed by gc
