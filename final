@@ -1,0 +1,17 @@
+from typing import Final, final
+
+
+@final
+class DontInherit:
+    def func(self):
+        print("This function cannot be overridden.")
+
+
+MY_CONST: Final = 'Dont Change'
+
+MY_CONST = 'mypy will blame'
+class Test(DontInherit):  # mypy will blame again
+    def func(self):
+        print(MY_CONST)
+
+Test().func()
