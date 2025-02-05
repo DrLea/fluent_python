@@ -499,4 +499,249 @@ print(app.start())
 
 These principles help write maintainable, scalable, and robust Python applications.
 
+- **Class types**
+
+  **Abstract Class**  
+Used as a blueprint for other classes. It defines methods that must be implemented in subclasses.  
+
+**Use case:** Enforce method implementation in subclasses.  
+
+```python
+from abc import ABC, abstractmethod
+
+class Animal(ABC):
+    @abstractmethod
+    def make_sound(self):
+        pass
+
+class Dog(Animal):
+    def make_sound(self):
+        return "Bark!"
+
+dog = Dog()
+print(dog.make_sound())  # ✅ Bark!
+
+# animal = Animal()  # ❌ TypeError: Can't instantiate abstract class
+```
+
+---
+
+**Concrete Class**  
+A regular class that can be instantiated directly.  
+
+**Use case:** Standard class used in everyday OOP.
+
+```python
+class Car:
+    def drive(self):
+        print("Driving!")
+
+car = Car()
+car.drive()  # ✅ Driving!
+```
+
+---
+
+**Mixin Class**  
+Provides additional behavior but is not meant to be instantiated on its own.  
+
+**Use case:** Code reusability without affecting the main inheritance hierarchy.  
+
+```python
+class LoggingMixin:
+    def log(self, message):
+        print(f"LOG: {message}")
+
+class User(LoggingMixin):
+    def __init__(self, name):
+        self.name = name
+
+user = User("Alice")
+user.log("User logged in")  # ✅ LOG: User logged in
+```
+
+---
+
+**Data Class**  
+Simplifies object creation by automatically generating `__init__`, `__repr__`, and `__eq__`.  
+
+**Use case:** Storing structured data efficiently.  
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+p1 = Point(1, 2)
+p2 = Point(1, 2)
+print(p1)          # ✅ Point(x=1, y=2)
+print(p1 == p2)    # ✅ True (auto-generated __eq__)
+```
+
+---
+
+**Singleton Class**  
+Ensures only one instance of the class exists.  
+
+**Use case:** Managing shared resources (e.g., database connections).  
+
+```python
+class Singleton:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+s1 = Singleton()
+s2 = Singleton()
+print(s1 is s2)  # ✅ True (same instance)
+```
+
+---
+
+**Aggregate Class**  
+Contains instances of other classes as attributes but does not control their lifecycle. Also, it is needed to import mixins in the correct order and does not have a body, so we don't care about the order of imports.  
+
+**Use case:** Objects that reference other objects but do not "own" them.  
+
+```python
+class Engine:
+    def start(self):
+        print("Engine started!")
+
+class Car:
+    def __init__(self, engine: Engine):
+        self.engine = engine
+
+car_engine = Engine()
+car = Car(car_engine)
+car.engine.start()  # ✅ Engine started!
+```
+
+---
+
+**Composition Class**  
+Contains instances of other classes and controls their lifecycle.  
+
+**Use case:** Stronger relationship than aggregation (objects are created inside the class).  
+
+```python
+class Battery:
+    def charge(self):
+        print("Battery charging!")
+
+class ElectricCar:
+    def __init__(self):
+        self.battery = Battery()  # Created inside the class
+
+car = ElectricCar()
+car.battery.charge()  # ✅ Battery charging!
+```
+
+---
+
+**Factory Class**  
+Encapsulates object creation logic.  
+
+**Use case:** Creating objects dynamically based on input.  
+
+```python
+class Car:
+    def drive(self):
+        print("Driving a car!")
+
+class Truck:
+    def drive(self):
+        print("Driving a truck!")
+
+class VehicleFactory:
+    @staticmethod
+    def get_vehicle(vehicle_type):
+        if vehicle_type == "car":
+            return Car()
+        elif vehicle_type == "truck":
+            return Truck()
+        raise ValueError("Unknown vehicle type")
+
+vehicle = VehicleFactory.get_vehicle("car")
+vehicle.drive()  # ✅ Driving a car!
+```
+
+---
+
+**Adapter Class**  
+Acts as a bridge between incompatible interfaces.  
+
+**Use case:** Making an existing class compatible with a new interface.  
+
+```python
+class OldPrinter:
+    def print_text(self, text):
+        print(f"Printing: {text}")
+
+class NewPrinter:
+    def print(self, text):
+        print(f"New print: {text}")
+
+class PrinterAdapter:
+    def __init__(self, old_printer):
+        self.old_printer = old_printer
+
+    def print(self, text):
+        self.old_printer.print_text(text)
+
+old_printer = OldPrinter()
+adapter = PrinterAdapter(old_printer)
+adapter.print("Hello!")  # ✅ Printing: Hello!
+```
+
+---
+
+**Proxy Class**  
+Controls access to another object.  
+
+**Use case:** Adding security, logging, or lazy initialization.  
+
+```python
+class RealSubject:
+    def request(self):
+        print("Processing request...")
+
+class Proxy:
+    def __init__(self, subject):
+        self.subject = subject
+
+    def request(self):
+        print("Logging: Request is being made.")
+        self.subject.request()
+
+proxy = Proxy(RealSubject())
+proxy.request()
+# ✅ Logging: Request is being made.
+# ✅ Processing request...
+```
+
+---
+
+**Summary Table:**  
+| Class Type   | Purpose |
+|-------------|---------|
+| **Abstract** | Enforces method implementation in subclasses |
+| **Concrete** | Standard class that can be instantiated |
+| **Mixin** | Adds behavior without affecting inheritance |
+| **Data** | Auto-generates boilerplate code for structured data |
+| **Singleton** | Ensures a single instance of a class |
+| **Aggregate** | Has objects as attributes but doesn’t own them; helps with correct mixin import order |
+| **Composition** | Owns and manages objects as attributes |
+| **Factory** | Creates objects dynamically based on input |
+| **Adapter** | Bridges incompatible interfaces |
+| **Proxy** | Controls access to another object |
+
+
+
 
