@@ -744,4 +744,33 @@ proxy.request()
 
 
 
+- **Overloading**
 
+  How @overload Works:
+  
+ - You write multiple @overload-decorated function signatures.
+ - You then implement a single function without @overload.
+ - The actual function handles all cases dynamically.
+
+Example:
+
+```
+from typing import overload, Union
+
+@overload
+def process(value: int) -> str: ...
+    
+@overload
+def process(value: str) -> int: ...
+
+def process(value: Union[int, str]) -> Union[str, int]:
+    if isinstance(value, int):
+        return str(value)  # Convert int to string
+    elif isinstance(value, str):
+        return len(value)  # Return length of string
+    raise ValueError("Unsupported type")
+
+# Usage:
+print(process(10))    # "10" (str)
+print(process("abc")) # 3 (int)
+```
