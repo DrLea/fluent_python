@@ -1,0 +1,40 @@
+# n, n+1 traverse
+print('n, n+1 traverse')
+
+nums = list(range(10))
+for i, j in zip(nums[:-1], nums[1:]):
+    print(i, j)
+
+
+# in-place reverse
+print('*'*100, '\nin-place reverse')
+
+nums = list(range(10))
+for i in range(len(nums)//2):
+    nums[i], nums[-i-1] = nums[-i-1], nums[i]
+print(nums)
+
+# or using ~ binary not
+print('\nor using ~ binary not')
+
+for i in range(len(nums)//2):
+    nums[i], nums[~i] = nums[~i], nums[i]
+print(nums)
+
+
+# matrix transpose
+print('*'*100, '\nmatrix transpose')
+
+nums = [list(range(i*3, i*3+3)) for i in range(4)]
+print(nums)
+nums[:] = zip(*nums)
+print(nums)
+
+
+# matrix rotate 90
+print('*'*100, '\nmatrix rotate 90')
+
+nums = [list(range(i*3, i*3+3)) for i in range(3)]
+print(nums)
+nums[:] = zip(*nums[::-1])
+print(nums)
