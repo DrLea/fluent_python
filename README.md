@@ -744,17 +744,18 @@ proxy.request()
 
 
 
+
 - **Overloading**
 
   How @overload Works:
   
- - You write multiple @overload-decorated function signatures.
- - You then implement a single function without @overload.
- - The actual function handles all cases dynamically.
+ 1. You write multiple @overload-decorated function signatures.
+ 2. You then implement a single function without @overload.
+ 3. The actual function handles all cases dynamically.
 
 Example:
 
-```
+```python
 from typing import overload, Union
 
 @overload
