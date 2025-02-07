@@ -1,0 +1,32 @@
+from typing import TypeVar, Generic, get_type_hints
+from collections.abc import Iterable
+from random import randint
+
+
+T = TypeVar('T')  # can be covariant intervariant and etc to support children classes as well
+class Loto(Generic[T]):
+
+    def __init__(self, num_balls: Iterable[T]):
+        self.num_balls = list[T](num_balls)
+
+    def pick(self) -> T | None:
+        if self.num_balls:
+            return self.num_balls.pop(randint(0, len(self.num_balls)-1))
+        return
+
+    def load(self, num_balls: Iterable[T]):
+        self.num_balls.extend(list(num_balls))
+
+    
+l = Loto[int](range(4))
+print(l.pick())
+print(l.pick())
+print(l.pick())
+l.load('abc')  # mypy will rise an error
+print(l.pick())
+print(l.pick())
+print(l.pick())
+print(l.pick())
+print(l.pick())
+
+print(get_type_hints(Loto))
