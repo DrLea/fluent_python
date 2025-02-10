@@ -809,3 +809,12 @@ def process(value: Union[int, str]) -> Union[str, int]:
 print(process(10))    # "10" (str)
 print(process("abc")) # 3 (int)
 ```
+
+
+- **Operator Overloading Rules in Python**
+
+It is forbidden to overload operators for built-in types.
+
+New operators cannot be created; only existing ones can be overloaded.
+
+Some operators cannot be overloaded at all: **is, and, or, not** (this does not apply to bitwise operators &, |, ~).
