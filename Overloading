@@ -1,0 +1,89 @@
+class A:
+    def __init__(self, val):
+        self.val = val
+
+    def __add__(self, other):  # a + other
+        try:
+            return A(self.val + other.val)  # Should create a new instance not modify self or other
+        except:
+            return NotImplemented  # Should return NotImplemented if anything goes wrong
+            # to give interpreter chance to handle computation by using other.__radd__
+            # don't mess it up with NotImplementedError from ABC. NotImplemented is used for operators
+
+    __radd__ = __add__  # other + a
+
+    def __str__(self):
+        return f"A({self.val})"
+
+
+class B:
+    def __init__(self, val):
+        self.val = val
+
+    def __add__(self, other):
+        return B(self.val + other.val)
+
+    def __radd__(self, other):
+        return B(other.val + self.val)
+
+    def __str__(self):
+        return f"B({self.val})"
+
+class C:
+    def __init__(self, val):
+        self.val = val
+
+    def __str__(self):
+        return f"C({self.val})"
+
+
+a = A(5)
+b = B(7)
+c = C(10)
+
+print(a+a)
+print(a+b)
+print(b+a)
+print(b+b)
+print(a+c)
+print(c+a)
+print(b+c)
+print(c+b)
+
+
+class D:
+    def __init__(self, val):
+        self.val = val
+
+    def __matmul__(self, other):  # overloads @ scalar multiplication works from python 3.5
+        try:
+            return D(sum([x*self.val for x in other]))
+        except:
+            return NotImplemented
+
+    __rmatmul__ = __matmul__
+
+    def __str__(self):
+        return f"D({self.val})"
+
+d = D(10)
+print([1,2,3,4] * 10)
+print(d@[1,2,3,4])
+print([1,2,3,4]@d)
+
+
+a2 = A(2)
+print(a, id(a))
+a += a2  # works even with __add__ but sometimes __iadd__ is preferable
+print(a, id(a))
+
+def iadd(self, other):
+    self.val += other.val
+    return self
+
+A.__iadd__ = iadd
+
+a2 = A(2)
+print(a, id(a))
+a += a2
+print(a, id(a))
