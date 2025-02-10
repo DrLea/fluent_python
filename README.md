@@ -820,6 +820,40 @@ New operators cannot be created; only existing ones can be overloaded.
 Some operators cannot be overloaded at all: **is, and, or, not** (this does not apply to bitwise operators &, |, ~).
 
 
+**Table 13.1. Method Names for Infix Operators**
+
+| Operator | Direct | Inverse | In-Place | Description |
+|----------|--------|---------|----------|-------------|
+| `+` | `__add__` | `__radd__` | `__iadd__` | Addition or concatenation |
+| `-` | `__sub__` | `__rsub__` | `__isub__` | Subtraction |
+| `*` | `__mul__` | `__rmul__` | `__imul__` | Multiplication or repetition |
+| `/` | `__truediv__` | `__rtruediv__` | `__itruediv__` | True division |
+| `//` | `__floordiv__` | `__rfloordiv__` | `__ifloordiv__` | Floor division |
+| `%` | `__mod__` | `__rmod__` | `__imod__` | Modulo division |
+| `divmod()` | `__divmod__` | `__rdivmod__` | `__idivmod__` | Returns a tuple (quotient, remainder) |
+| `**`, `pow()` | `__pow__` | `__rpow__` | `__ipow__` | Exponentiation (supports modulo argument) |
+| `@` | `__matmul__` | `__rmatmul__` | `__imatmul__` | Matrix multiplication |
+| `&` | `__and__` | `__rand__` | `__iand__` | Bitwise AND |
+| `|` | `__or__` | `__ror__` | `__ior__` | Bitwise OR |
+| `^` | `__xor__` | `__rxor__` | `__ixor__` | Bitwise XOR |
+| `<<` | `__lshift__` | `__rlshift__` | `__ilshift__` | Left bitwise shift |
+| `>>` | `__rshift__` | `__rrshift__` | `__irshift__` | Right bitwise shift |
+
+---
+
+**Table 16.2. Comparison Operators: Inverse Methods Are Called When the First Call Returns `NotImplemented`**
+
+| Group | Infix Operator | Direct Method Call | Inverse Method Call | Fallback Behavior |
+|--------|---------------|--------------------|---------------------|--------------------|
+| Equality | `a == b` | `a.__eq__(b)` | `b.__eq__(a)` | Return `id(a) == id(b)` |
+| | `a != b` | `a.__ne__(b)` | `b.__ne__(a)` | Return `not (a == b)` |
+| Ordering | `a > b` | `a.__gt__(b)` | `b.__lt__(a)` | Raise `TypeError` |
+| | `a < b` | `a.__lt__(b)` | `b.__gt__(a)` | Raise `TypeError` |
+| | `a >= b` | `a.__ge__(b)` | `b.__le__(a)` | Raise `TypeError` |
+| | `a <= b` | `a.__le__(b)` | `b.__ge__(a)` | Raise `TypeError` |
+
+
+
 
 **How does Python store `int`?**
 
