@@ -818,3 +818,16 @@ It is forbidden to overload operators for built-in types.
 New operators cannot be created; only existing ones can be overloaded.
 
 Some operators cannot be overloaded at all: **is, and, or, not** (this does not apply to bitwise operators &, |, ~).
+
+
+
+**How does Python store `int`?**
+
+In Python, `int` is not stored as a fixed number of bits but as a list of fixed-length blocks (`digits`). This is implemented through arbitrary-precision arithmetic.
+
+- In a **32-bit system**, Python uses **30-bit blocks** (essentially splitting large numbers into 30-bit chunks).
+- In a **64-bit system**, Python uses **60-bit blocks**.
+
+**Example:** The number `2 ** 1000` in Python is **not stored as a 1000-bit number**. Instead, it is broken into multiple 30-bit or 60-bit blocks, and operations are performed on these blocks.
+
+
