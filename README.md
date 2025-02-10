@@ -161,6 +161,40 @@ This demonstrates that even in languages with strict access control mechanisms, 
 
 
 
+**INFIX operators power. Compound Interest Calculation in Python and Java**
+
+**Python**
+In Python, infix operators can be used with various types, including `decimal.Decimal`, ensuring precise calculations:
+
+```python
+from decimal import Decimal
+
+principal = Decimal("1000")
+rate = Decimal("0.05")
+periods = 10
+
+interest = principal * ((Decimal("1") + rate) ** periods - Decimal("1"))
+print(interest)
+```
+
+**Java**
+In Java, when using `BigDecimal` for precision, infix operators cannot be used. Instead, method chaining is required:
+
+```java
+import java.math.BigDecimal;
+
+BigDecimal principal = new BigDecimal("1000");
+BigDecimal rate = new BigDecimal("0.05");
+int periods = 10;
+
+BigDecimal interest = principal.multiply(BigDecimal.ONE.add(rate)
+        .pow(periods).subtract(BigDecimal.ONE));
+
+System.out.println(interest);
+```
+
+
+
 
 
 ## Notes
