@@ -1,0 +1,17 @@
+from random import randint
+
+
+def d6():
+    return randint(1,6)
+
+# iter() can take 2 args as well. 
+# First must be callable without args and second stop-word
+for i in iter(d6, 3):
+    print(i)
+
+
+# more useful example
+with open('mydata.db', 'rb') as f:
+    read64 = lambda: f.read(64)
+    for block in iter(read64, b''):
+        print(block)
