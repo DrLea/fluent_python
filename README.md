@@ -194,6 +194,27 @@ System.out.println(interest);
 ```
 
 
+```python
+s = 'ABC'
+for char in s:
+    print(char)
+```
+
+**For loop implemented with While**
+
+```python
+s = 'ABC'
+it = iter(s)
+while True:
+    try:
+        print(next(it))
+    except StopIteration:
+        del it
+        break
+```
+
+
+
 
 
 
