@@ -1,0 +1,96 @@
+# from itertools import count
+# print(list(count()))  # will fill ur RAM
+
+
+
+# TWO CLASS APPROACH FOR ITERATORS
+print('\nTWO CLASS APPROACH FOR ITERATORS\n')
+class MyIterable:
+    def __iter__(self):
+        return MyIterator()  # Returns a new iterator instance
+
+class MyIterator:
+    def __init__(self):
+        self.nums = [1, 2, 3, 4, 5]
+        self.index = 0
+
+    def __iter__(self):
+        return self  # An iterator must return itself
+
+    def __next__(self):
+        if self.index >= len(self.nums):
+            raise StopIteration  # Signal end of iteration
+        value = self.nums[self.index]
+        self.index += 1
+        return value
+
+# Example usage:
+obj = MyIterable()
+
+for i in obj:  # This creates a new MyIterator() every time
+    print(i)
+
+print("Second iteration:")
+
+for i in obj:  # Works again because MyIterable() creates a fresh iterator
+    print(i)
+
+
+
+
+# SINGLE_CLASS ITERATOR AND ITERABLE
+print('\nSINGLE_CLASS ITERATOR AND ITERABLE\n')
+class SingleIterator:
+    def __init__(self):
+        self.nums = [1, 2, 3, 4, 5]
+        self.index = 0
+
+    def __iter__(self):
+        return self  # Returns itself, meaning it is both iterable and iterator
+
+    def __next__(self):
+        if self.index >= len(self.nums):
+            raise StopIteration
+        value = self.nums[self.index]
+        self.index += 1
+        return value
+
+# Example usage:
+obj = SingleIterator()
+
+for i in obj:
+    print(i)
+
+for i in obj:  # Won't work, obj is exhausted!
+    print(i)
+
+
+
+# FIXED WITH GENERATOR
+print('\nFIXED WITH GENERATOR\n')
+class SingleIterator:
+    def __init__(self):
+        self.nums = [1, 2, 3, 4, 5]
+        self.index = 0
+
+    def __iter__(self):
+        for i in self.nums:
+            yield i  # This makes SingleIterator an iterable, not an iterator!
+
+    def __next__(self):
+        if self.index >= len(self.nums):
+            raise StopIteration
+        value = self.nums[self.index]
+        self.index += 1
+        return value
+
+# Example usage:
+obj = SingleIterator()
+
+for i in obj:
+    print(i)
+
+print("Second iteration:")
+
+for i in obj:
+    print(i)
