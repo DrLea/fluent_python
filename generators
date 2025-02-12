@@ -1,0 +1,34 @@
+def gen(*args):  # generator
+    for i in args:
+        yield i
+
+def gen2():  # also generator
+    yield 'hello'
+    print('best')
+    yield 'world'
+
+a = gen(1,2,'dog', 'apple', [1,2,3], print)
+
+b = (i for i in 'hello')  # generator expression (also generator)
+
+c = gen2()
+
+print(type(a), type(b), type(c))
+
+for i in a:
+    print(i)
+
+for i in a:
+    print(i)
+
+for i in b:
+    print(i)
+
+for i in b:
+    print(i)
+
+for i in c:
+    print(i)
+
+for i in c:
+    print(i)
