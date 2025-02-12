@@ -194,13 +194,14 @@ System.out.println(interest);
 ```
 
 
+- **For loop implemented with While**
+
 ```python
 s = 'ABC'
 for char in s:
     print(char)
 ```
 
-**For loop implemented with While**
 
 ```python
 s = 'ABC'
