@@ -1,0 +1,30 @@
+# yield from works from python 3.3
+
+# simple example
+def sub_gen(num):
+    yield num + .1
+    yield num + .2
+    yield num + .3
+
+def gen():
+    yield 1
+    yield from sub_gen(1)
+    yield 2
+    yield 3
+    yield from sub_gen(3)
+
+for i in gen():
+    print(i)
+
+
+# recursive example
+def tree(cls, lvl=0):
+    yield cls.__name__, lvl
+    for sub_cls in cls.__subclasses__():
+        yield from tree(sub_cls, lvl + 1)
+
+def display(cls):
+    for name, lvl in tree(cls):
+        print(f"{' ' * lvl}{name}")
+
+display(BaseException)
