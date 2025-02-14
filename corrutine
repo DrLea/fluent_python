@@ -1,0 +1,26 @@
+def cor():  # corrutine 
+    while 1:
+        name = yield
+        print(f'Hello, {name}!')
+
+c = cor() # create obj
+
+next(c)  # start corrutine to make it execute till yield and then be able to send smth
+# also can be activated by c.send(None)
+
+c.send('John')  # Send a value to the generator 
+c.send('Allice')  # Send a value to the generator 
+c.close()  # after this command all sends will return StopIteration
+
+
+def gen():  # smth 50/50
+    yield 1
+    a = yield
+    print(a)
+    yield 2
+
+g = gen()
+
+print(next(g))  # Prime the generator
+print(next(g)) # Send a value to the generator
+g.send('John') # Send a value to the generator
