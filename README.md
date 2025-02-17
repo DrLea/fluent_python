@@ -877,7 +877,7 @@ Some operators cannot be overloaded at all: **is, and, or, not** (this does not 
 
 
 
-**How does Python store `int`?**
+- **How does Python store `int`?**
 
 In Python, `int` is not stored as a fixed number of bits but as a list of fixed-length blocks (`digits`). This is implemented through arbitrary-precision arithmetic.
 
@@ -885,5 +885,23 @@ In Python, `int` is not stored as a fixed number of bits but as a list of fixed-
 - In a **64-bit system**, Python uses **60-bit blocks**.
 
 **Example:** The number `2 ** 1000` in Python is **not stored as a 1000-bit number**. Instead, it is broken into multiple 30-bit or 60-bit blocks, and operations are performed on these blocks.
+
+
+- **🔹 Attributes in all objects**  
+
+**`__class__`** → The object's class  
+**`__dir__()`** → Lists all available attributes  
+**`__repr__`, `__str__`** → String representations  
+**`__eq__`, `__ne__`, `__lt__`, `__le__`, `__gt__`, `__ge__`** → Comparison methods  
+**`__hash__`** → Unique identifier (for hashable objects)  
+**`__sizeof__()`** → Memory size of the object  
+
+**🔸 Type-dependent attributes**  
+
+**`__dict__`** → Only for objects with dynamic attributes  (noo 😿)
+**`__name__`** → Only for functions, classes, and modules  (noo 😿)
+**`__getitem__`, `__setitem__`** → Only for indexable objects  
+**`__call__`** → Only for callable objects  
+
 
 
