@@ -1,0 +1,52 @@
+class Context:
+    def __enter__(self):
+        print('Context manager entered')
+        return 4
+
+    def __exit__(self, *args, **kwargs):
+        print('Context manager exited')
+
+
+with Context() as a: # a equals to what __enter__() returns
+    print(a)
+    a += 1
+
+print(a) # variables are not enclosed as in Callable, they are still accessible outside the context
+
+
+import sys
+
+class LookingGlass:
+    def __enter__(self):
+        self.original_write = sys.stdout.write  # Save the original sys.stdout.write
+        sys.stdout.write = self.reverse_write   # Replace with our custom method
+        return "JABBERWOCKY"  # Returned value for use in `with` statement
+
+    def reverse_write(self, text):
+        self.original_write(text[::-1])  # Write the reversed text using saved original func
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        sys.stdout.write = self.original_write  # Restore the original write method
+        if exc_type is ZeroDivisionError:
+            print("Please DO NOT divide by zero!")
+            return True  # Suppress the exception
+
+print('hello')
+
+with LookingGlass() as what:
+    print("The secret to success is: ", what)
+
+print('hello')
+
+
+with (  # available from python 3.10
+    Context() as a,
+    LookingGlass() as b,
+    ):
+    print(a)
+
+with Context() as a:  # prior versions
+    with LookingGlass() as b:
+        print(a)
+
+
