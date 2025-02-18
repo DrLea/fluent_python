@@ -1,0 +1,139 @@
+class CustomContext:
+    def __init__(self, gen):
+        self.gen = gen()
+
+    def __call__(self):
+        return self
+
+    def __enter__(self):
+        return next(self.gen)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            next(self.gen)
+        except StopIteration:
+            return
+
+
+@CustomContext
+def logger():
+    print('start')
+    yield 5
+    print('end')
+
+
+with logger() as log:
+    print(log+2)
+    # raise Exception()
+    print(log+2)
+
+
+from contextlib import (
+    contextmanager, closing, suppress, nullcontext, 
+    AbstractContextManager, ContextDecorator, ExitStack
+)
+import sqlite3
+
+# ----------------------------------------
+# 1. @contextmanager: Convert a generator into a context manager
+# ----------------------------------------
+@contextmanager
+def managed_resource(name):
+    print(f"Opening resource: {name}")
+    try:
+        yield f"Resource({name})"
+    finally:
+        print(f"Closing resource: {name}")
+
+with managed_resource("example"):
+    print("Using the resource")
+
+# Output:
+# Opening resource: example
+# Using the resource
+# Closing resource: example
+
+# ----------------------------------------
+# 2. closing: Ensures objects with close() method are properly closed
+# ----------------------------------------
+with closing(sqlite3.connect(":memory:")) as conn:
+    cursor = conn.cursor()
+    cursor.execute("SELECT 1")
+
+# Output: No explicit close() needed, connection is closed automatically
+
+# ----------------------------------------
+# 3. suppress: Ignore specific exceptions within the block
+# ----------------------------------------
+with suppress(ZeroDivisionError):
+    result = 1 / 0  # No exception raised
+
+print("Code continues after exception suppression.")
+
+# Output:
+# Code continues after exception suppression.
+
+# ----------------------------------------
+# 4. nullcontext: Acts as a no-op context manager when an object 
+#    may or may not require context management
+# ----------------------------------------
+def process_file(file=None):
+    with (open(file) if file else nullcontext()) as f:
+        print(f.read() if f else "No file provided")
+
+process_file()  # Works even if no file is passed
+
+# Output:
+# No file provided
+
+# ----------------------------------------
+# 5. AbstractContextManager: Simplifies creation of custom context managers
+# ----------------------------------------
+class MyManager(AbstractContextManager):
+    def __enter__(self):
+        print("Entering MyManager")
+        return self
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("Exiting MyManager")
+
+with MyManager():
+    print("Inside MyManager")
+
+# Output:
+# Entering MyManager
+# Inside MyManager
+# Exiting MyManager
+
+# ----------------------------------------
+# 6. ContextDecorator: Enables using context managers as function decorators
+# ----------------------------------------
+class Timer(ContextDecorator):
+    def __enter__(self):
+        print("Start timer")
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        print("Stop timer")
+
+@Timer()
+def my_function():
+    print("Running function")
+
+my_function()
+
+# Output:
+# Start timer
+# Running function
+# Stop timer
+
+# ----------------------------------------
+# 7. ExitStack: Dynamically manage multiple context managers
+# ----------------------------------------
+files = ["file1.txt", "file2.txt"]  # Example files
+with ExitStack() as stack:
+    file_handles = [stack.enter_context(open(file, "w")) for file in files]
+    for f in file_handles:
+        f.write("Hello, world!")
+
+# Output: All opened files are automatically closed
+
