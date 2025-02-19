@@ -50,6 +50,7 @@
  
 ## Raw book parts
 - According to PEP 484, int is compatible with float, and float is compatible with complex. In practice, this makes sense because int supports all the operations float does, plus additional ones like &, |, <<, etc. As a result, int is also compatible with complex. For example, if i = 3, then i.real is 3 and i.imag is 0.
+But it does not work with typing because float does not inheriate from int and vice versa
 - **Closures** Scope (Замыкания)
   
 Logic of Variable Lookup
