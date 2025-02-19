@@ -219,9 +219,39 @@ while True:
 
 - **REPL** - (read-eval-print-loop)
 
+Works as a heart of Interpreters
 
 
-vars(obj) -> dict is a built-in Python function that returns the __dict__ attribute of an object.
+- **EAFP**  
+Easier to ask for forgiveness than permission. This Python programming style means it's better to assume that a key or attribute exists and catch an exception if it doesn't. This approach results in frequent use of `try` and `except` blocks, making the code cleaner and often more efficient. It contrasts with the **LBYL** style, common in languages like C.
+
+- **LBYL**  
+Look before you leap. This style involves checking preconditions before accessing or calling something. It is opposite to **EAFP** and often relies on many `if` statements. In multithreaded programs, it can lead to race conditions, such as:
+```python
+if key in mapping:
+    return mapping[key]  # Another thread may remove the key before this line
+```
+This issue can be mitigated with locking or by using the **EAFP** approach.
+
+---
+
+- **Do This, Then That: Else Blocks Outside If**  
+The `else` clause is not limited to `if` statements—it can also be used with `for`, `while`, and `try`. However, its semantics differ significantly from `if/else`:
+- **for/else**: Executes if the loop completes normally (not interrupted by `break`).
+- **while/else**: Executes if the loop exits due to the condition becoming false (not `break`).
+- **try/else**: Executes only if no exception occurs in `try`.
+
+According to Python’s documentation, exceptions raised in `else` are not caught by preceding `except` blocks. Some argue that `else` is misleading in loops, as it implies "otherwise" instead of "then." A more intuitive keyword might have been `then`, but changing Python syntax would be complex.
+
+---
+
+- **Unicode Trivia: λ**  
+The official Unicode name for `λ` (U+03BB) is **GREEK SMALL LETTER LAMDA**—without the "b." This spelling follows a request from Greece’s national body, as documented by the Unicode Consortium.
+
+
+
+
+- **vars(obj)** -> dict is a built-in Python function that returns the __ dict __ attribute of an object.
 ``` python
 class Person:
     def __init__(self, name, age):
@@ -236,7 +266,7 @@ import math
 a = {'+': lambda a,b: a+b}
 a.extend(vars(math))
 ```
-If the object has no __dict__ attribute (e.g., if it's a built-in type like int, list, or a class using __slots__), vars(obj) will raise a TypeError.
+If the object has no __ dict __ attribute (e.g., if it's a built-in type like int, list, or a class using __ slots __), vars(obj) will raise a TypeError.
 vars() without arguments returns the dictionary of the current local scope, similar to locals().
 
 
