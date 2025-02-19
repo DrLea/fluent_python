@@ -217,6 +217,28 @@ while True:
 
 
 
+- **REPL** - (read-eval-print-loop)
+
+
+
+vars(obj) -> dict is a built-in Python function that returns the __dict__ attribute of an object.
+``` python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+p = Person("Alice", 25)
+print(vars(p))
+# {'name': 'Alice', 'age': 25}
+
+import math
+a = {'+': lambda a,b: a+b}
+a.extend(vars(math))
+```
+If the object has no __dict__ attribute (e.g., if it's a built-in type like int, list, or a class using __slots__), vars(obj) will raise a TypeError.
+vars() without arguments returns the dictionary of the current local scope, similar to locals().
+
 
 
 
