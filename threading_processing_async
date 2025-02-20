@@ -1,0 +1,104 @@
+import itertools
+import time
+import asyncio
+from threading import Thread, Event
+from multiprocessing import Process, Event as MpEvent, synchronize
+
+
+# Multithreading Approach
+def spin_thread(msg: str, done: Event) -> None:
+    """Spinner animation using multithreading"""
+    for char in itertools.cycle(r'\|/-'):
+        status = f'\r{char} {msg}'
+        print(status, end='', flush=True)
+        if done.wait(0.1):
+            break
+    blanks = ' ' * len(status)
+    print(f'\r{blanks}\r', end='')
+
+
+def slow() -> int:
+    """Simulates a slow task"""
+    time.sleep(3)
+    return 42
+
+
+def supervisor_thread() -> int:
+    """Manages the spinner using multithreading"""
+    done = Event()  # the way of sharing flag between threads
+    spinner = Thread(target=spin_thread, args=('thinking!', done))
+    print(f'spinner object: {spinner}')
+    spinner.start()
+    result = slow()
+    done.set()  # sets done as True
+    spinner.join()
+    return result
+
+
+# Multiprocessing Approach
+def spin_process(msg: str, done: synchronize.Event) -> None:
+    """Spinner animation using multiprocessing"""
+    for char in itertools.cycle(r'\|/-'):
+        status = f'\r{char} {msg}'
+        print(status, end='', flush=True)
+        if done.wait(0.1):
+            break
+    blanks = ' ' * len(status)
+    print(f'\r{blanks}\r', end='')
+
+
+def supervisor_process() -> int:
+    """Manages the spinner using multiprocessing"""
+    done = MpEvent()  # somehow sends bool flag between processes that work on diff interpreters
+    # implemented in lowlevel langs using symophores (Even if multiproc API looks like threading API
+    # Event() in multiprocessing is function) 
+    spinner = Process(target=spin_process, args=('thinking!', done))
+    print(f'spinner object: {spinner}')
+    spinner.start()
+    result = slow()
+    done.set()
+    spinner.join()
+    return result
+
+
+# Async Approach
+async def spin_async(msg: str) -> None:
+    """Spinner animation using asyncio"""
+    for char in itertools.cycle(r'\|/-'):
+        status = f'\r{char} {msg}'
+        print(status, flush=True, end='')
+        try:
+            await asyncio.sleep(0.1)
+        except asyncio.CancelledError:  # helps to escape
+            break
+    blanks = ' ' * len(status)
+    print(f'\r{blanks}\r', end='')
+
+
+async def slow_async() -> int:
+    """Simulates a slow async task"""
+    await asyncio.sleep(3)
+    return 42
+
+
+async def supervisor_async() -> int:
+    """Manages the spinner using asyncio"""
+    spinner = asyncio.create_task(spin_async('thinking!'))
+    print(f'spinner object: {spinner}')
+    result = await slow_async()
+    spinner.cancel()
+    return result
+
+
+if __name__ == '__main__':
+    print("Choose method: 1) Threading  2) Multiprocessing  3) Async")
+    choice = input("Enter choice: ").strip()
+
+    if choice == "1":
+        print(f'Answer: {supervisor_thread()}')
+    elif choice == "2":
+        print(f'Answer: {supervisor_process()}')
+    elif choice == "3":
+        print(f'Answer: {asyncio.run(supervisor_async())}')
+    else:
+        print("Invalid choice")
