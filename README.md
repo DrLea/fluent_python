@@ -103,7 +103,72 @@ A conflict over a shared resource. Occurs when multiple execution units access a
 
 **Async Programming**  
 - `asyncio` runs in a single thread and is unaffected by GIL.  
-- Additional threads in async apps should be used only for specific tasks.  
+- Additional threads in async apps should be used only for specific tasks.
+
+
+**Greenlet and Gevent: Lightweight Concurrency in Python**
+
+**Greenlet**
+`greenlet` is a Python library that provides lightweight coroutines (also called "micro-threads"). Unlike normal threads, greenlets are **cooperatively scheduled**, meaning they **do not rely on the OS scheduler** and instead manually yield control.
+
+**Key Features:**
+- Extremely lightweight compared to OS threads.
+- No Global Interpreter Lock (GIL) issues, as switching happens within a single thread.
+- No true parallelism, just concurrency through context switching.
+
+**Example Using Greenlet:**
+```python
+from greenlet import greenlet
+
+def task1():
+    print("Task 1: Start")
+    gr2.switch()
+    print("Task 1: Resume")
+
+def task2():
+    print("Task 2: Start")
+    gr1.switch()
+    print("Task 2: Resume")
+
+gr1 = greenlet(task1)
+gr2 = greenlet(task2)
+gr1.switch()
+```
+
+**Gevent**
+`gevent` is a high-level library built on top of `greenlet` that automates coroutine switching. It replaces common **blocking** functions (like `time.sleep()`, `socket.recv()`, etc.) with **non-blocking** versions using monkey patching.
+
+**Key Features:**
+- Automatic coroutine switching (no need for manual `.switch()`).
+- Supports networking, web scraping, and I/O-heavy tasks efficiently.
+- Monkey patches Python’s standard library to make blocking calls non-blocking.
+
+**Example Using Gevent:**
+```python
+import gevent
+from gevent import monkey
+
+monkey.patch_all()
+
+def task(name, delay):
+    for i in range(3):
+        print(f'{name} iteration {i}')
+        gevent.sleep(delay)
+
+g1 = gevent.spawn(task, "Task 1", 1)
+g2 = gevent.spawn(task, "Task 2", 1.5)
+
+gevent.joinall([g1, g2])
+```
+
+**Comparison: Greenlet vs Gevent vs Asyncio vs Threads**
+| Feature         | **Greenlet** | **Gevent** | **Asyncio** | **Threading** |
+|---------------|------------|---------|---------|------------|
+| **Type** | Manual coroutines | Automatic coroutines | Async event loop | OS threads |
+| **Switching** | Manual (`switch()`) | Automatic (`spawn()`) | Automatic (`await`) | Preemptive (OS) |
+| **Parallelism?** | ❌ No | ❌ No | ❌ No | ❌ No (due to GIL) |
+| **Best For** | Fine-grained control | Networking, I/O | Async libraries | Blocking I/O |
+
 
 
  
