@@ -1,0 +1,56 @@
+import time
+
+print("=== Newline (\\n) ===")
+print("Hello\nWorld")
+print("\n")
+
+print("=== Tab (\\t) ===")
+print("Hello\tWorld")
+print("\n")
+
+print("=== Carriage Return (\\r) ===")
+print("12345\rABCDE")  # "12345" is overwritten
+print("\n")
+
+print("=== Backspace (\\b) ===")
+print("Hello\b World")  # Deletes 'o'
+print("\n")
+
+print("=== Form Feed (\\f) ===")
+print("Hello\fWorld")  # Effect depends on the terminal
+print("\n")
+
+print("=== Vertical Tab (\\v) ===")
+print("Hello\vWorld")
+print("\n")
+
+print("=== Backslash (\\\\) ===")
+print("This is a backslash: \\")
+print("\n")
+
+print("=== Single Quote (\\') ===")
+print('It\'s a nice day')
+print("\n")
+
+print("=== Double Quote (\\\") ===")
+print("He said, \"Hello!\"")
+print("\n")
+
+print("=== Hexadecimal (\\xhh) ===")
+print("Hex 41 is: \x41")  # ASCII 65 -> 'A'
+print("\n")
+
+print("=== Unicode (\\uXXXX, \\UXXXXXXXX) ===")
+print("Smiley face: \U0001F60A")
+print("\n")
+
+print("=== Carriage Return with Dynamic Overwrite ===")
+for char in "Hello":
+    print(f"\r{char}", end='', flush=True)
+    time.sleep(0.5)
+print("\n")
+
+print("=== Line Clear using Carriage Return ===")
+print("Wait for it...", end='', flush=True)
+time.sleep(2)
+print("\r              \rDone!")
