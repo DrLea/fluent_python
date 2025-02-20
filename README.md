@@ -48,6 +48,65 @@
   - **Dictionaries:** Fast lookups by key, maintaining order.
   - **Sets:** Quick membership tests, removing duplicates efficiently.
  
+
+## Chapter 19: Concurrency
+
+**Concurrency**  
+Ability to handle multiple tasks by switching between them or running them in parallel when possible. A single-core processor allows concurrency via an OS scheduler that alternates task execution. Also known as multitasking.  
+
+**Parallelism**  
+Executing multiple computations simultaneously using multi-core processors, multiple CPUs, GPUs, or distributed systems.  
+
+**Execution Unit**  
+An entity that runs code concurrently with independent state and call stack. Python supports three types: processes, threads, and coroutines.  
+
+**Process**  
+An instance of a program during execution with allocated memory and CPU time. Processes are isolated, communicate via IPC (e.g., pipes, sockets), and require serialization for Python object transfer. Processes support preemptive multitasking.  
+
+**Thread**  
+An execution unit within a process. Threads share memory, enabling data sharing but risking race conditions. Threads consume fewer resources than processes and support preemptive multitasking.  
+
+**Coroutine**  
+A function that can pause and resume execution. In Python, coroutines use `async def`, `yield`, or `await` and run within an event loop. They support cooperative multitasking and are resource-efficient compared to threads and processes.  
+
+**Queue**  
+A FIFO data structure enabling execution units to exchange data and control messages. Python provides `queue` (for threads), `multiprocessing.Queue` (for processes), and `asyncio.Queue` (for async tasks). Supports LIFO and priority queues.  
+
+**Lock**  
+A synchronization mechanism to prevent data corruption. Execution units must acquire a lock before modifying shared data. A basic lock is a mutex (mutual exclusion). Implementations vary by concurrency model.  
+
+**Race Condition**  
+A conflict over a shared resource. Occurs when multiple execution units access a shared resource simultaneously, leading to unpredictable behavior. Can also happen with CPU time allocation.
+
+
+- **Processes, Threads, and GIL in Python**
+
+- Each Python interpreter instance is a separate process.  
+- Additional processes can be created using `multiprocessing` or `concurrent.futures`.  
+- The `subprocess` module runs external programs.  
+
+**Threads in Python**  
+- Python runs user code and garbage collection in a single thread.  
+- Additional threads can be created with `threading` or `concurrent.futures`.  
+
+**Global Interpreter Lock (GIL)**  
+- GIL ensures only one thread executes Python code at a time.  
+- It is periodically released (~every 5ms) to allow thread switching.  
+- C extensions can release GIL for long tasks.  
+- I/O operations (disk, network, `time.sleep()`) release GIL automatically.  
+
+**Impact of GIL**  
+- GIL limits performance for CPU-bound tasks but has little effect on I/O-bound tasks.  
+- Use `multiprocessing` or `ProcessPoolExecutor` to utilize multiple CPU cores.  
+- Jython and IronPython have no GIL but are outdated.  
+- PyPy has GIL but provides better performance in some cases.  
+
+**Async Programming**  
+- `asyncio` runs in a single thread and is unaffected by GIL.  
+- Additional threads in async apps should be used only for specific tasks.  
+
+
+ 
 ## Raw book parts
 - According to PEP 484, int is compatible with float, and float is compatible with complex. In practice, this makes sense because int supports all the operations float does, plus additional ones like &, |, <<, etc. As a result, int is also compatible with complex. For example, if i = 3, then i.real is 3 and i.imag is 0.
 But it does not work with typing because float does not inheriate from int and vice versa
