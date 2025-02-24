@@ -397,6 +397,23 @@ vars() without arguments returns the dictionary of the current local scope, simi
 - **WSGI**
 ![image](https://github.com/user-attachments/assets/a4e3aae1-bba7-4552-9938-c37d1d9f61d3)
 
+**Gunicorn**  
+- **Strengths:** Simple, easy to configure, works well with Django & Flask, good for synchronous workloads.  
+- **When to Choose:** If you need a reliable WSGI server with minimal setup and are okay with a prefork model (no native async support).  
+
+**uWSGI**  
+- **Strengths:** Highly configurable, supports multiple worker models (prefork, threaded, async), good for performance tuning.  
+- **When to Choose:** If you need fine-grained control over concurrency, high performance, or compatibility with large-scale applications.  
+
+**NGINX Unit**  
+- **Strengths:** Dynamic configuration (no restarts needed), supports multiple languages (Python, PHP, Go, etc.), lightweight and modern.  
+- **When to Choose:** If you need a versatile application server that can run different languages with minimal configuration overhead.  
+
+**mod_wsgi**  
+- **Strengths:** Integrated with Apache, stable, good for hosting multiple Python apps in shared environments.  
+- **When to Choose:** If you're already using Apache and want a tightly integrated solution without extra reverse proxies.  
+
+
 
 
 
