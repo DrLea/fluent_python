@@ -394,6 +394,11 @@ If the object has no __ dict __ attribute (e.g., if it's a built-in type like in
 vars() without arguments returns the dictionary of the current local scope, similar to locals().
 
 
+- **WSGI**
+![image](https://github.com/user-attachments/assets/a4e3aae1-bba7-4552-9938-c37d1d9f61d3)
+
+
+
 
 
 ## Notes
