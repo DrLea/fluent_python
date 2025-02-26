@@ -61,7 +61,7 @@ Executing multiple computations simultaneously using multi-core processors, mult
 An entity that runs code concurrently with independent state and call stack. Python supports three types: processes, threads, and coroutines.  
 
 **Process**  
-An instance of a program during execution with allocated memory and CPU time. Processes are isolated, communicate via IPC (e.g., pipes, sockets), and require serialization for Python object transfer. Processes support preemptive multitasking.  
+An instance of a program during execution with allocated memory and CPU time. Processes are isolated, communicate via IPC (e.g., pipes, sockets), and require serialization for Python object transfer. Processes support preemptive multitasking. **sys.cpu_count()** is a helpful func that returns the number of cores in our machine, on Intel proc it shows more than actual number because it counts hyper-threads as well.
 
 **Thread**  
 An execution unit within a process. Threads share memory, enabling data sharing but risking race conditions. Threads consume fewer resources than processes and support preemptive multitasking.  
