@@ -1,0 +1,20 @@
+from concurrent.futures import ThreadPoolExecutor
+from time import perf_counter, sleep
+
+
+RANGE = 100
+
+def get_num(i):
+    sleep(0.1)
+    return i
+
+with ThreadPoolExecutor() as executor:
+    t = perf_counter()
+    executor.map(get_num, range(RANGE))
+    print(perf_counter() - t)
+
+
+t = perf_counter()
+for i in range(RANGE):
+    get_num(i)
+print(perf_counter() - t)
