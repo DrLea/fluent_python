@@ -1,0 +1,19 @@
+from tqdm import tqdm
+from time import perf_counter
+from random import shuffle
+
+def bubble_sort(arr: list) -> list:
+    n = len(arr)
+    with tqdm(total=n) as pbar:
+        for i in range(n):
+            for j in range(0, n-i-1):
+                if arr[j] > arr[j+1]:
+                    arr[j], arr[j+1] = arr[j+1], arr[j]
+            pbar.update(1)
+        return arr
+lis = list(range(1_000_1))
+shuffle(lis)
+t = perf_counter()
+bubble_sort(lis)
+print(perf_counter() - t)
+print(lis[:5], lis[-5:])
