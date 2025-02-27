@@ -1,0 +1,51 @@
+from concurrent import futures
+from time import perf_counter
+from typing import NamedTuple
+import sys
+
+NUMBERS = [999999999999999917, 112582705942171, 112272535095293, 7777777777777753, 
+           115797848077099, 1099726899285419, 12, 99999999999999999999327513]
+
+def is_prime(n: int) -> bool:
+    if n < 2:
+        return False
+    if n in (2, 3):
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+class PrimeResult(NamedTuple):
+    n: int
+    flag: bool
+    elapsed: float
+
+def check(n: int) -> PrimeResult:
+    t0 = perf_counter()
+    res = is_prime(n)
+    return PrimeResult(n, res, perf_counter() - t0)
+
+def main() -> None:
+    workers = int(sys.argv[1]) if len(sys.argv) > 1 else None
+    
+    with futures.ProcessPoolExecutor(workers) as executor:
+        actual_workers = executor._max_workers  # type: ignore
+        print(f'Checking {len(NUMBERS)} numbers with {actual_workers} processes:')
+        
+        t0 = perf_counter()
+        numbers = sorted(NUMBERS, reverse=True)
+        
+        for result in executor.map(check, numbers):  # returns results in order no matter which completed first
+            label = 'P' if result.flag else ' '
+            print(f'{result.n:16} {label} {result.elapsed:9.6f}s')
+        
+        total_time = perf_counter() - t0
+        print(f'Total time: {total_time:.2f}s')
+
+if __name__ == '__main__':
+    main()
