@@ -411,7 +411,23 @@ vars() without arguments returns the dictionary of the current local scope, simi
 
 **mod_wsgi**  
 - **Strengths:** Integrated with Apache, stable, good for hosting multiple Python apps in shared environments.  
-- **When to Choose:** If you're already using Apache and want a tightly integrated solution without extra reverse proxies.  
+- **When to Choose:** If you're already using Apache and want a tightly integrated solution without extra reverse proxies.
+
+
+
+- **Async**
+  ![image](https://github.com/user-attachments/assets/d4293877-0810-498c-80e3-a4e3d0931ccb)
+
+
+**Under the Hood of the Asyncio Event Loop**
+
+The asyncio event loop uses `.send` to activate coroutines. Coroutines, in turn, call other coroutines, including library functions, using `await`. As mentioned earlier, `await` borrows much of its implementation from `yield from`, which also utilizes `.send` for coroutine management.
+
+The `await` chain eventually reaches a low-level awaitable object that returns a generator. The event loop interacts with this generator in response to events such as timer triggers or network I/O. These low-level awaitable objects and generators reside deep within libraries and are not part of their public APIs. Some may even be written in C as extensions.
+
+By using functions like `asyncio.gather` and `asyncio.create_task`, we can create multiple concurrent `await` channels, enabling concurrent execution of I/O operations within a single event loop in a single thread.
+
+
 
 
 
