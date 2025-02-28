@@ -414,6 +414,7 @@ vars() without arguments returns the dictionary of the current local scope, simi
 - **When to Choose:** If you're already using Apache and want a tightly integrated solution without extra reverse proxies.
 
 
+___
 
 - **Async**
   ![image](https://github.com/user-attachments/assets/d4293877-0810-498c-80e3-a4e3d0931ccb)
@@ -429,7 +430,7 @@ By using functions like `asyncio.gather` and `asyncio.create_task`, we can creat
 
 
 
-
+___
 
 
 
