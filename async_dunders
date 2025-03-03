@@ -1,0 +1,46 @@
+import asyncio
+
+
+
+# ASYNC WITH
+print("\nASYNC WITH\n")
+class AsyncResource:
+    async def __aenter__(self):
+        print("Acquiring resource asynchronously...")
+        await asyncio.sleep(1)  # Simulating async setup
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print("Releasing resource asynchronously...")
+        await asyncio.sleep(1)  # Simulating async cleanup
+
+async def main():
+    async with AsyncResource() as resource:
+        print("Using resource...")
+
+asyncio.run(main())
+
+
+# ASYNC FOR
+print("\nASYNC FOR\n")
+
+class AsyncCounter:
+    def __init__(self, start, end):
+        self.current = start
+        self.end = end
+
+    def __aiter__(self):  # take a note that it is not async method
+        return self
+
+    async def __anext__(self):
+        if self.current >= self.end:
+            raise StopAsyncIteration
+        self.current += 1
+        await asyncio.sleep(1)  # Simulating async operation
+        return self.current
+
+async def main():
+    async for num in AsyncCounter(1, 5):
+        print(num)
+
+asyncio.run(main())
