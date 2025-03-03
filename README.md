@@ -429,6 +429,76 @@ The `await` chain eventually reaches a low-level awaitable object that returns a
 By using functions like `asyncio.gather` and `asyncio.create_task`, we can create multiple concurrent `await` channels, enabling concurrent execution of I/O operations within a single event loop in a single thread.
 
 
+- **Semaphores in Python**
+
+Edsger Dijkstra invented semaphores in the early 1960s. They are flexible synchronization primitives used to control access to shared resources. Python provides three semaphore implementations: in the `threading`, `multiprocessing`, and `asyncio` modules.
+
+**Threading Semaphore**
+```python
+import threading
+import time
+
+semaphore = threading.Semaphore(2)
+
+def task(name):
+    with semaphore:  # Acquires and releases automatically
+        print(f"{name} is running")
+        time.sleep(2)
+    print(f"{name} finished")
+
+threads = [threading.Thread(target=task, args=(f"Thread-{i}",)) for i in range(5)]
+
+for t in threads:
+    t.start()
+for t in threads:
+    t.join()
+```
+
+**Multiprocessing Semaphore**
+```python
+import multiprocessing
+import time
+
+def worker(semaphore, name):
+    with semaphore:  # Acquires and releases automatically
+        print(f"{name} is running")
+        time.sleep(2)
+    print(f"{name} finished")
+
+if __name__ == "__main__":
+    semaphore = multiprocessing.Semaphore(2)
+    processes = [multiprocessing.Process(target=worker, args=(semaphore, f"Process-{i}")) for i in range(5)]
+    
+    for p in processes:
+        p.start()
+    for p in processes:
+        p.join()
+```
+
+**Asyncio Semaphore**
+```python
+import asyncio
+
+async def task(semaphore, name):
+    async with semaphore:  # Acquires and releases automatically
+        print(f"{name} is running")
+        await asyncio.sleep(2)
+    print(f"{name} finished")
+
+async def main():
+    semaphore = asyncio.Semaphore(2)
+    tasks = [task(semaphore, f"Task-{i}") for i in range(5)]
+    await asyncio.gather(*tasks)
+
+asyncio.run(main())
+```
+
+**BoundedSemaphore**
+Each module provides `BoundedSemaphore`, which prevents the semaphore count from exceeding the initial value. This ensures that `release()` is not called more times than `acquire()`, avoiding logical errors in resource management.
+
+
+
+
 
 ___
 
