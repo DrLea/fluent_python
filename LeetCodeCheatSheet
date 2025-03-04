@@ -38,3 +38,9 @@ nums = [list(range(i*3, i*3+3)) for i in range(3)]
 print(nums)
 nums[:] = zip(*nums[::-1])
 print(nums)
+
+
+# cache
+@cache
+def complex_repetitive_func(a, b):
+    return a + b # complex stuff (saves result of function on certain inputs)
