@@ -505,6 +505,22 @@ Each module provides `BoundedSemaphore`, which prevents the semaphore count from
 
 
 
+- **Device Latency Comparison**
+
+| Device          | CPU Cycles | "Human" Scale |
+|----------------|------------|---------------|
+| L1 Cache      | 3          | 3 seconds     |
+| L2 Cache      | 14         | 14 seconds    |
+| RAM (Main Memory) | 250    | 250 seconds   |
+| Disk    | 41,000,000  | 1.3 years     |
+| Network    | 240,000,000 | 7.6 years     |
+
+Ryan Dahl (Node.js creator) claims that we should not treat file or network IO operations as nonblocking. Because of this table
+
+
+
+
+
 
 
 ___
