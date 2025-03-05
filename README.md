@@ -429,6 +429,13 @@ The `await` chain eventually reaches a low-level awaitable object that returns a
 By using functions like `asyncio.gather` and `asyncio.create_task`, we can create multiple concurrent `await` channels, enabling concurrent execution of I/O operations within a single event loop in a single thread.
 
 
+ - **Parenthises**
+
+Sometimes we need to put () because . (dot) has higher priority than await
+
+```{name for name in names if (await probe(name)).found}```
+
+
 - **Semaphores in Python**
 
 Edsger Dijkstra invented semaphores in the early 1960s. They are flexible synchronization primitives used to control access to shared resources. Python provides three semaphore implementations: in the `threading`, `multiprocessing`, and `asyncio` modules.
