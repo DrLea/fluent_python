@@ -1,0 +1,20 @@
+import asyncio
+
+
+async def agenerator(num1, num2):  # can be consumed only within async func or async gen (async for)
+    for i in range(num1, num2):
+        await asyncio.sleep(1)
+        yield i
+
+
+agenerator_expression = (i async for i in agenerator(5, 10))
+
+
+async def main():
+    async for i in agenerator(0, 5):  # consumes generator
+        print(f'Generator: {i}')
+    async for i in agenerator_expression:  # consumes async generator expression
+        print(f'GenExpres: {i}')
+
+
+asyncio.run(main())
