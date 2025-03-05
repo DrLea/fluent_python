@@ -1,0 +1,24 @@
+import asyncio
+from time import sleep
+
+
+async def func(a, b):
+    await asyncio.sleep(1)
+    print(a,b)
+    loop = asyncio.get_running_loop()
+    loop.run_in_executor(None, func3)
+    
+async def func2(a, b):
+    await asyncio.sleep(2)
+    print(b, a)
+    func3()
+
+def func3():
+    for i in range(3):
+        sleep(1)
+        print(i)
+
+async def main():
+    await asyncio.gather(func('a', 'b'), func2('a', 'b'))
+
+asyncio.run(main())
