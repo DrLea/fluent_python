@@ -1213,4 +1213,38 @@ In Python, `int` is not stored as a fixed number of bits but as a list of fixed-
 **`__call__`** → Only for callable objects  
 
 
+**Descriptor**
+
+A **descriptor** is an object that defines how an attribute is accessed, modified, or deleted in another class. It is implemented using methods like `__get__`, `__set__`, and `__delete__` inside a class. Descriptors are typically used to manage attribute access in a controlled way, such as for validation, logging, or computed properties.
+
+**Example:**
+
+```python
+class Descriptor:
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        print(f"Getting {self.name}")
+        return instance.__dict__.get(self.name)
+    
+    def __set__(self, instance, value):
+        print(f"Setting {self.name} to {value}")
+        instance.__dict__[self.name] = value
+    
+    def __delete__(self, instance):
+        print(f"Deleting {self.name}")
+        del instance.__dict__[self.name]
+
+class MyClass:
+    attr = Descriptor("attr")
+
+obj = MyClass()
+obj.attr = 42  # Setting attr to 42
+print(obj.attr)  # Getting attr, prints 42
+del obj.attr  # Deleting attr
+```
+
+
+
 
