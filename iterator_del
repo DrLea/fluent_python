@@ -1,0 +1,25 @@
+# del deletes reference not object from memory
+# iterator creates reference not copy of list
+
+class MyIterator:
+    def __init__(self, lis):
+        self.counter = -1
+        self.list = lis
+        
+    def __iter__(self):
+        return self
+        
+    def __next__(self):
+        self.counter += 1
+        if self.counter >= len(self.list):
+            raise StopIteration
+        return self.list[self.counter]
+        
+        
+a = [1,2,3]
+b = MyIterator(a)  # iterators are very efficient they don't copy list but rather create new reference
+print(next(b))
+print(next(b))
+del a  # there were 2 refs 'a' and 'b.list' so deletion of 1 of them won't caouse garbage collector to free memory taken by list
+print(next(b))
+print(next(b))
