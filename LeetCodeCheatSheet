@@ -44,3 +44,18 @@ print(nums)
 @cache
 def complex_repetitive_func(a, b):
     return a + b # complex stuff (saves result of function on certain inputs)
+
+
+# linkedlists reversing
+def reverse_linked_list(head):
+    prev = None
+    curr = head
+    next_node = None
+
+    while curr:
+        next_node = curr.next  # Store next node
+        curr.next = prev       # Reverse current node's pointer
+        prev = curr            # Move prev to current
+        curr = next_node       # Move current to next node
+
+    return prev
