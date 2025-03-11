@@ -1,0 +1,84 @@
+class Person:
+    def __init__(self, name: str, age: int):
+        self.name = name  # Using the setter to enforce type safety
+        self.age = age
+
+    @property
+    def name(self):
+        """Getter for name"""
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        """Setter for name"""
+        if not isinstance(value, str):
+            raise ValueError("Name must be a string")
+        self._name = value
+
+    @name.deleter
+    def name(self):
+        """Deleter for name"""
+        print("Deleting name...")
+        del self._name
+
+    @property
+    def age(self):
+        """Getter for age"""
+        return self._age
+
+    @age.setter
+    def age(self, value):
+        """Setter for age"""
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Age must be a positive integer")
+        self._age = value
+
+    @age.deleter
+    def age(self):
+        """Deleter for age"""
+        print("Deleting age...")
+        del self._age
+
+    def __repr__(self):
+        return f"Person(name='{self.name}', age={self.age})"
+
+
+ben = Person('Ben', 4)
+# ben.age = -13
+print(ben)
+
+# NO REPETITIONS FACTORY IS USED
+
+def managed_property(attr_name, type_check):
+    """Factory function to create property with getter, setter, and deleter"""
+    private_attr = f"_{attr_name}"
+
+    def getter(self):
+        return getattr(self, private_attr)
+
+    def setter(self, value):
+        if not isinstance(value, type_check):
+            raise ValueError(f"{attr_name} must be of type {type_check.__name__}")
+        setattr(self, private_attr, value)
+
+    def deleter(self):
+        print(f"Deleting {attr_name}...")
+        delattr(self, private_attr)
+
+    return property(getter, setter, deleter)
+
+class Person:
+    name = managed_property("name", str)
+    age = managed_property("age", int)
+
+    def __init__(self, name: str, age: int):
+        self.name = name  # Uses the property to enforce validation
+        self.age = age
+
+    def __repr__(self):
+        return f"Person(name='{self.name}', age={self.age})"
+
+
+alex = Person('Alex', 43)
+# alex.age = 'seg'
+print(alex)
