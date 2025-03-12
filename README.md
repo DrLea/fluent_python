@@ -519,6 +519,29 @@ Ryan Dahl (Node.js creator) claims that we should not treat file or network IO o
 
 
 
+**Special Methods in Python**
+
+In Python, special methods (also known as dunder methods) are always looked up in the class rather than the instance. This means that even if an instance has an attribute with the same name as a special method, the method in the class will not be overridden.
+
+
+```python
+class Example:
+    def __len__(self):
+        return 42
+
+instance = Example()
+print(len(instance))  # Output: 42
+
+# Attempting to override __len__ at the instance level
+instance.__len__ = lambda: 100
+print(len(instance))  # Still outputs: 42
+```
+
+
+
+
+
+
 
 
 
