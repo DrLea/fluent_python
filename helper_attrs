@@ -1,0 +1,40 @@
+from dataclasses import dataclass
+
+
+@dataclass
+class Daddy:
+    heritage = 'inherited'
+    b = 1
+
+@dataclass
+class Test(Daddy):
+    a: int
+    b = 2
+
+
+t = Test(1)
+print(f'{t.__class__=}')
+print(f'{type(t)=}  equal to t.__class__\n')
+print(f'{t.__dict__=}')
+print(f'{vars(t)=}  equal to vars(t.__dict__\n')
+print(f'{dir(t)=}\n')
+# getattr, hasattr, setattr calls funcs
+print(f'{getattr(t, 'b')=}')
+print(f'{hasattr(t, 'heritage')=}')
+print(f'{setattr(t, 'heritage', 'nothing')=}')
+print(f'{getattr(t, 'heritage')=}\n')
+# direct work through __dict__ bypasses descriptors and can be used to solve inf recursive funcs
+t.__dict__['a'] = 2
+print(f'{t.__dict__['a']=}')
+
+'''
+__getattribute__ and __setattr__ are called always when we try to access or modify smth
+
+__getattr__ is called right after __getattribute__ if it fails with AttributeError
+
+
+'''
+
+
+
+
