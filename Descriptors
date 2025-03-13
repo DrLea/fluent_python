@@ -1,0 +1,96 @@
+class Descriptor:
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__.get(self.name, None)
+    
+    def __set__(self, instance, value):
+        if value is None:
+            print('Cannot set None to', instance)
+        instance.__dict__[self.name] = value
+
+
+class Test:
+    name = Descriptor('name')
+    age = Descriptor('age')
+    salary = 12
+
+    def __repr__(self):
+        return f'Test({self.name}, {self.age}, {self.salary})'
+
+
+t = Test()
+print(t)
+t.name = 'John'
+t.age = None
+t.salary = None
+print(t)
+
+
+
+class Descriptor:
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, instance, owner):
+        return instance.__dict__.get(self.name, None)
+    
+    def __set__(self, instance, value):
+        if value is None:
+            print('Cannot set None to', instance)
+        instance.__dict__[self.name] = value
+
+
+class Test:
+    name = Descriptor('name')
+    age = Descriptor('age')
+    salary = 12
+
+    def __repr__(self):
+        return f'Test({self.name}, {self.age}, {self.salary})'
+
+
+t = Test()
+print(t)
+t.name = 'John'
+t.age = None
+t.salary = None
+print(t)
+
+
+class UpgradedDescriptor:
+    def __set_name__(self, owner, name): # now we shoud not write name of attr while creating
+        self.name = name
+    
+    def __get__(self, instance, owner):
+        return instance.__dict__.get(self.name, None)
+    
+    def __set__(self, instance, value):
+        if value is None:
+            print(f'Cannot set None to {self.name}')
+            return
+        instance.__dict__[self.name] = value
+    
+    def __delete__(self, instance):
+        print(f'Deleting {self.name}')
+        del instance.__dict__[self.name]
+
+
+class AdvancedTest:
+    name = UpgradedDescriptor()
+    age = UpgradedDescriptor()
+
+    def __repr__(self):
+        return f'AdvancedTest({self.name}, {self.age})'
+
+
+t2 = AdvancedTest()
+print(t2)
+t2.name = 'Alice'
+t2.age = 25
+print(t2)
+del t2.name
+print(t2)
+
+
