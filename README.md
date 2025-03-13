@@ -519,7 +519,7 @@ Ryan Dahl (Node.js creator) claims that we should not treat file or network IO o
 
 
 
-**Special Methods in Python**
+- **Special Methods in Python**
 
 In Python, special methods (also known as dunder methods) are always looked up in the class rather than the instance. This means that even if an instance has an attribute with the same name as a special method, the method in the class will not be overridden.
 
@@ -536,6 +536,25 @@ print(len(instance))  # Output: 42
 instance.__len__ = lambda: 100
 print(len(instance))  # Still outputs: 42
 ```
+
+
+- **Practical Tips for Using Descriptors**
+
+**Use `property` for Simplicity**  
+The built-in `property` class creates overriding descriptors with both `__get__` and `__set__` methods. If a setter is not provided, it raises `AttributeError`, making it an easy way to create read-only attributes.
+
+**Read-Only Descriptors Require `__set__`**  
+If implementing a read-only attribute with a descriptor, define both `__get__` and `__set__`. The `__set__` method should raise `AttributeError` to prevent modification.
+
+**Validation Descriptors Need Only `__set__`**  
+For value-checking descriptors, implement `__set__` to validate input and store the value in the instance's `__dict__`. This avoids calling `__get__` and improves performance.
+
+**Efficient Caching with `__get__` Only**  
+A descriptor with only `__get__` is non-overriding. It can perform expensive computations and cache the result in an instance attribute, bypassing `__get__` on subsequent access. The `@functools.cached_property` decorator works this way.
+
+**Instance Attributes Can Mask Non-Special Methods**  
+Functions and methods define only `__get__`, so assigning `my_obj.the_method = 7` masks the method for that instance. However, special methods like `__repr__` are always looked up in the class, not instances.
+
 
 
 
