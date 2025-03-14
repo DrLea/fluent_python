@@ -1,0 +1,22 @@
+class Test:
+    class Meta:
+        pass
+
+
+print(type(Test), type(Test()))  # type is metclass all classes are also objects but what is class of the classes then?
+print(Test.Meta.__qualname__)  # full name denoted by .
+
+MetaTest = type('MetaTest', (object,), {}) # (name, (classes to inherit if none then object), {attrs and funcs})
+print(type(MetaTest()))
+
+
+class Test2(Test, MetaTest):
+    x = 12
+    def y(self, z):
+        print(self.x * z)
+
+
+MetaTest2 = type('MetaTest2', (Test, MetaTest), {'x': 12, 'y': lambda self, z: print(self.x * z)})  # we used to think that type returns us type of obj but if we pass 3 args to it it returns new class
+
+Test2().y(10)
+MetaTest2().y(5)
