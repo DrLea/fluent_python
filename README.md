@@ -171,6 +171,16 @@ gevent.joinall([g1, g2])
 
 
 
+## Chapter 24 Metaprogramming
+
+It is difficult to state where it is really needed to create classes on run unless you are not writing new framework.
+
+We used to think that type() is just method that checks type of obj but in fact it is meta class that can create classes if you call it with 3 params 
+
+type(name, (tuple of parent classes if no then object,), {dict of methods and attrs}) -> class
+
+
+
  
 ## Raw book parts
 - According to PEP 484, int is compatible with float, and float is compatible with complex. In practice, this makes sense because int supports all the operations float does, plus additional ones like &, |, <<, etc. As a result, int is also compatible with complex. For example, if i = 3, then i.real is 3 and i.imag is 0.
