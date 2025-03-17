@@ -179,6 +179,8 @@ We used to think that type() is just method that checks type of obj but in fact 
 
 type(name, (tuple of parent classes if no then object,), {dict of methods and attrs}) -> class
 
+namedtuple can also be used to create simple classes as data storages yet in most trivial cases
+
 
 
  
