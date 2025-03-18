@@ -20,3 +20,29 @@ MetaTest2 = type('MetaTest2', (Test, MetaTest), {'x': 12, 'y': lambda self, z: p
 
 Test2().y(10)
 MetaTest2().y(5)
+
+
+
+class MetaKlass(type):
+    print('% MetaKlass body')
+
+    @classmethod
+    def __prepare__(meta_cls, cls_name, bases):  # according to aggrement instead of cls as in normal class methods we use meta_cls 
+        args = (meta_cls, cls_name, bases)
+        print(f'% MetaKlass.__prepare__{args!r}')
+        return {}  # Возвращаем пустой словарь или кастомный, если требуется
+
+    def __new__(meta_cls, cls_name, bases, cls_dict):  # notice that we did not use @classmethod here coz it is by default does not have access to instance
+        args = (meta_cls, cls_name, bases, cls_dict)  # meta_cls is itself, cls_name: str, bases is tuple of Inheriting classes, cls_dict is dict of all args and methods
+        print(f'% MetaKlass.__new__{args!r}')
+        
+        def inner_2(self):
+            print(f'% MetaKlass.__new__:inner_2({self!r})')
+        
+        cls = super().__new__(meta_cls, cls_name, bases, cls_dict)
+        cls.method_c = inner_2
+        return cls
+    
+    def __repr__(cls):  # here we use cls instead of self, coz in fact all instances of metaclass are classes
+        cls_name = cls.__name__
+        return f"<class {cls_name!r} built by MetaKlass>"
