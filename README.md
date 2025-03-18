@@ -179,7 +179,7 @@ We used to think that type() is just method that checks type of obj but in fact 
 
 type(name, (tuple of parent classes if no then object,), {dict of methods and attrs}) -> class
 
-namedtuple can also be used to create simple classes as data storages yet in most trivial cases
+NamedTuple can also be used to create simple classes as data storages yet in most trivial cases, but it is not the same
 
 
 
@@ -567,6 +567,22 @@ A descriptor with only `__get__` is non-overriding. It can perform expensive com
 **Instance Attributes Can Mask Non-Special Methods**  
 Functions and methods define only `__get__`, so assigning `my_obj.the_method = 7` masks the method for that instance. However, special methods like `__repr__` are always looked up in the class, not instances.
 
+
+
+**The Mysterious Relationship Between `object` and `type`**
+
+![image](https://github.com/user-attachments/assets/e4e742e2-2fa9-466f-8016-dca65cbdd9d9)
+
+
+There is an astonishing relationship between the `object` and `type` classes:
+
+- `object` is an instance of `type`, while
+- `type` is a subclass of `object`.
+
+This relationship is "magical": it cannot be fully expressed using Python's own means because each of these classes must exist before the other can be defined. Moreover, the fact that `type` is an instance of itself is also a kind of magic.
+
+
+![image](https://github.com/user-attachments/assets/b7aff003-50ab-4e93-b21f-8639f806df29)
 
 
 
